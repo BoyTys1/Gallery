@@ -24,7 +24,8 @@ h1 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3.5rem)
 .rooms-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 2rem; }
 .room-card { position: relative; cursor: pointer; border: 1px solid rgba(201,168,76,0.25); background: rgba(255,255,255,0.02); padding: 2rem 1.8rem 1.6rem; transition: all 0.3s; overflow: hidden; }
 .room-card:hover { border-color: rgba(201,168,76,0.6); background: rgba(201,168,76,0.04); transform: translateY(-4px); }
-.room-card-preview { width: 100%; height: 160px; margin-bottom: 1.3rem; object-fit: cover; border: 1px solid rgba(201,168,76,0.2); }
+/* Fixed Preview Image Styling */
+.room-card-preview { width: 100%; height: 120px; margin-bottom: 1.3rem; opacity: 0.8; object-fit: cover; display: block; border: 1px solid rgba(201,168,76,0.2); }
 .room-card-name { font-family: 'Playfair Display', serif; font-size: 1.35rem; color: var(--cream); margin-bottom: 0.5rem; }
 .room-header { text-align: center; padding: 2.5rem 2rem 2rem; background: linear-gradient(to bottom, #0d0a04, var(--dark)); border-bottom: 1px solid rgba(201,168,76,0.2); position: relative; }
 .back-btn { position: absolute; left: 2rem; top: 50%; transform: translateY(-50%); background: none; border: 1px solid rgba(201,168,76,0.4); color: var(--gold); padding: 0.5rem 1rem; cursor: pointer; text-transform: uppercase; letter-spacing: 0.2em; font-size: 0.8rem; }
@@ -33,6 +34,7 @@ h1 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3.5rem)
 .section-label::after { content: ''; flex: 1; height: 1px; background: rgba(201,168,76,0.2); }
 .wall { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 3rem 2.5rem; margin-bottom: 4rem; }
 .frame { padding: 12px; background: linear-gradient(135deg, #8B6914 0%, #c9a84c 25%, #6b4c2a 50%, #c9a84c 75%, #8B6914 100%); box-shadow: 0 8px 30px rgba(0,0,0,0.8); }
+/* Frame Image Styling */
 .frame img { width: 100%; height: 220px; object-fit: cover; display: block; }
 .tooltip { position: fixed; z-index: 1000; width: 320px; background: var(--panel-bg); border: 1px solid var(--panel-border); padding: 1.5rem; pointer-events: none; opacity: 0; transition: all 0.2s; backdrop-filter: blur(12px); color: var(--cream); }
 .tooltip.visible { opacity: 1; }
@@ -101,83 +103,124 @@ const ROOMS = [
       {
         type: 'paintings', artist: 'John Constable',
         works: [
-          { title: { en: 'Stonehenge', it: 'Stonehenge', fr: 'Stonehenge', es: 'Stonehenge' }, date: '1835', body: { en: 'A powerful depiction of the ancient monument.' }, img: 'https://upload.wikimedia.org/wikipedia/commons/3/3a/Constable_-_Stonehenge%2C_1629-1888%2C_2006AK8142.jpg' },
-          { title: { en: 'The Hay Wain', it: 'Il Carro da Fieno', fr: 'La Charrette de foin', es: 'La carreta de heno' }, date: '1821', body: { en: 'An iconic English landscape.' }, img: 'https://picsum.photos/id/12/400/300' },
-          { title: { en: 'The Cornfield', it: 'Il Campo di Grano', fr: 'Le Champ de blé', es: 'El campo de maíz' }, date: '1826', body: { en: 'A view near East Bergholt.' }, img: 'https://picsum.photos/id/13/400/300' }
+          { title: { en: 'Stonehenge', it: 'Stonehenge', fr: 'Stonehenge', es: 'Stonehenge', de: 'Stonehenge', zh: '巨石阵', ja: 'ストーンヘンジ' }, date: '1835', body: { en: 'A powerful depiction of the ancient monument.', it: 'Una potente rappresentazione dell\'antico monumento.', fr: 'Une représentation puissante du monument ancien.' }, img: 'https://picsum.photos/id/11/400/300' },
+          { title: { en: 'The Hay Wain', it: 'Il Carro da Fieno', fr: 'La Charrette de foin', es: 'La carreta de heno', de: 'Der Heuwagen', zh: '干草车', ja: '乾草の車' }, date: '1821', body: { en: 'An iconic English landscape.', it: 'Un iconico paesaggio inglese.', fr: 'Un paysage anglais emblématique.' }, img: 'https://picsum.photos/id/12/400/300' },
+          { title: { en: 'The Cornfield', it: 'Il Campo di Grano', fr: 'Le Champ de blé', es: 'El campo de maíz', de: 'Das Kornfeld', zh: '麦田', ja: 'コーンフィールド' }, date: '1826', body: { en: 'A view near East Bergholt.', it: 'Una vista vicino a East Bergholt.', fr: 'Une vue près d\'East Bergholt.' }, img: 'https://picsum.photos/id/13/400/300' }
         ]
       },
       {
         type: 'paintings', artist: 'J.M.W Turner',
         works: [
-          { title: { en: 'The Shipwreck', it: 'Il Naufragio' }, date: '1805', body: { en: 'Mastery of maritime drama.' }, img: 'https://picsum.photos/id/14/400/300' },
-          { title: { en: 'Rain, Steam and Speed', it: 'Pioggia, Vapore e Velocità' }, date: '1844', body: { en: 'The Great Western Railway.' }, img: 'https://picsum.photos/id/15/400/300' }
+          { title: { en: 'The Shipwreck', it: 'Il Naufragio', fr: 'Le Naufrage', es: 'El naufragio', de: 'Der Schiffbruch', zh: '海难', ja: '難破船' }, date: '1805', body: { en: 'Mastery of maritime drama.', it: 'Maestria del dramma marittimo.', fr: 'Maîtrise du drame maritime.' }, img: 'https://picsum.photos/id/14/400/300' },
+          { title: { en: 'Rain, Steam and Speed', it: 'Pioggia, Vapore e Velocità', fr: 'Pluie, vapeur et vitesse', es: 'Lluvia, vapor y velocidad', de: 'Regen, Dampf und Geschwindigkeit', zh: '雨，蒸汽和速度', ja: '雨、蒸気、速度' }, date: '1844', body: { en: 'The Great Western Railway.', it: 'La Great Western Railway.', fr: 'Le chemin de fer.' }, img: 'https://picsum.photos/id/15/400/300' },
+          { title: { en: 'Snow Storm', it: 'Tempesta di Neve', fr: 'Tempête de neige', es: 'Tormenta de nieve', de: 'Schneesturm', zh: '暴风雪', ja: '雪嵐' }, date: '1842', body: { en: 'Steamboat off a Harbour\'s Mouth.', it: 'Battello a vapore all\'imboccatura di un porto.', fr: 'Bateau à vapeur.' }, img: 'https://picsum.photos/id/16/400/300' }
         ]
       },
-      { type: 'audio', title: { en: 'I Wandered Lonely as a Cloud', it: 'Vagavo Solitario come una Nuvola' }, author: 'Wordsworth', audioText: { en: 'I wandered lonely as a cloud that floats on high o\'er vales and hills.' }, excerpt: { en: 'I wandered lonely...' } }
+      {
+        type: 'paintings', artist: 'Caspar David Friedrich',
+        works: [
+          { title: { en: 'Wanderer above the Sea of Fog', it: 'Viandante sul Mare di Nebbia', fr: 'Le Voyageur contemplant une mer de nuages', es: 'El caminante sobre el mar de nubes', de: 'Der Wanderer über dem Nebelmeer', zh: '雾海上的漫游者', ja: '雲海の上の旅人' }, date: '1818', body: { en: 'The pinnacle of Romanticism.', it: 'Il culmine del Romanticismo.', fr: 'Romantisme.' }, img: 'https://picsum.photos/id/17/400/300' },
+          { title: { en: 'The Abbey in the Oakwood', it: 'L\'Abbazia nel Querceto', fr: 'L\'Abbaye dans une forêt de chênes', es: 'Abadía en el robledal', de: 'Abtei im Eichwald', zh: '橡树林中的修道院', ja: 'オークの森の修道院' }, date: '1809', body: { en: 'A haunting cemetery scene.', it: 'Una inquietante scena di cimitero.', fr: 'Scène de cimetière.' }, img: 'https://picsum.photos/id/18/400/300' }
+        ]
+      },
+      { type: 'audio', title: { en: 'I Wandered Lonely as a Cloud', it: 'Vagavo Solitario come una Nuvola', fr: 'Je vagabondais seul come un nuage' }, author: 'Wordsworth', audioText: { en: 'I wandered lonely as a cloud that floats on high o\'er vales and hills.', it: 'Vagavo solitario come una nuvola che fluttua in alto sopra valli e colline.' }, excerpt: { en: 'I wandered lonely...', it: 'Vagavo solitario...' } },
+      { type: 'audio', title: { en: 'The Tyger', it: 'The Tyger (La Tigre)', fr: 'Le Tigre' }, author: 'Blake', audioText: { en: 'Tyger Tyger, burning bright, In the forests of the night.', it: 'Tigre! Tigre! Divampante splendore, Nelle foreste della notte.' }, excerpt: { en: 'Tyger Tyger...', it: 'Tigre! Tigre!...' } }
     ]
   },
   {
     id: 'beauty-room',
-    name: { en: 'Beauty Room', it: 'Sala della Bellezza' },
-    previewImg: 'https://picsum.photos/id/16/400/300',
+    name: { en: 'Beauty Room', fr: 'Chambre de Beauté', es: 'Sala de Belleza', de: 'Schönheitszimmer', it: 'Sala della Bellezza', zh: '美展厅', ja: 'ビューティー・ルーム' },
+    previewImg: 'https://picsum.photos/id/19/400/300',
     sections: [
       {
         type: 'paintings', artist: 'Claude Monet',
         works: [
-          { title: { en: 'Impression, Sunrise', it: 'Impressione, Levar del Sole' }, date: '1872', body: { en: 'The dawn of impressionism.' }, img: 'https://picsum.photos/id/17/400/300' },
-          { title: { en: 'Cliff Walk at Pourville', it: 'Passeggiata sulla Scogliera' }, date: '1882', body: { en: 'Luminous coastal light.' }, img: 'https://picsum.photos/id/18/400/300' }
+          { title: { en: 'Impression, Sunrise', it: 'Impressione, Levar del Sole', fr: 'Impression, soleil levant', es: 'Impresión, sol naciente', de: 'Impression, Sonnenaufgang', zh: '日出·印象', ja: '印象・日の出' }, date: '1872', body: { en: 'The dawn of a new movement.', it: 'L\'alba di un nuovo movimento.', fr: 'Nouveau mouvement.' }, img: 'https://picsum.photos/id/20/400/300' },
+          { title: { en: 'Cliff Walk at Pourville', it: 'Passeggiata sulla Scogliera a Pourville', fr: 'Promenade sur la falaise à Pourville', es: 'Paseo por el acantilado en Pourville', de: 'Klippenwanderung bei Pourville', zh: '普尔维尔断崖散步', ja: 'プルヴィルの断崖の散歩' }, date: '1882', body: { en: 'Luminous coastal light.', it: 'Luce costiera luminosa.', fr: 'Lumière côtière.' }, img: 'https://picsum.photos/id/21/400/300' }
+        ]
+      },
+      {
+        type: 'paintings', artist: 'Berthe Morisot',
+        works: [
+          { title: { en: 'Summer\'s Day', it: 'Giorno d\'Estate', fr: 'Jour d\'été', es: 'Día de verano', de: 'Sommertag', zh: '夏日', ja: '夏の日' }, date: '1879', body: { en: 'Two women in a boat.', it: 'Due donne in barca.', fr: 'Sur le bateau.' }, img: 'https://picsum.photos/id/22/400/300' },
+          { title: { en: 'Hanging the Laundry', it: 'Il Bucato Steso', fr: 'Le Linge qui sèche', es: 'Colgando la colada', de: 'Wäsche aufhängen', zh: '晒衣服', ja: '洗濯物を干す' }, date: '1875', body: { en: 'Capturing domestic life.', it: 'Catturando la vita domestica.', fr: 'Vie domestique.' }, img: 'https://picsum.photos/id/23/400/300' }
         ]
       }
     ]
   },
   {
     id: 'little-dining-room',
-    name: { en: 'Little Dining Room', it: 'Piccola Sala da Pranzo' },
-    previewImg: 'https://picsum.photos/id/19/400/300',
+    name: { en: 'Little Dining Room', fr: 'Petite Salle à Manger', es: 'Comedor Pequeño', de: 'Kleiner Speisesaal', it: 'Piccola Sala da Pranzo', zh: '小餐厅', ja: '小ダイニングルーム' },
+    previewImg: 'https://picsum.photos/id/24/400/300',
     sections: [
       {
         type: 'paintings', artist: 'Vincent van Gogh',
         works: [
-          { title: { en: 'Starry Night', it: 'Notte Stellata' }, date: '1889', body: { en: 'The view from Saint-Rémy.' }, img: 'https://picsum.photos/id/20/400/300' }
+          { title: { en: 'Starry Night', it: 'Notte Stellata', fr: 'La Nuit étoilée', es: 'La noche estrellada', de: 'Sternennacht', zh: '星夜', ja: '星月夜' }, date: '1889', body: { en: 'The view from Saint-Rémy-de-Provence.', it: 'La vista da Saint-Rémy-de-Provence.', fr: 'Ciel de Saint-Rémy.' }, img: 'https://picsum.photos/id/25/400/300' },
+          { title: { en: 'Landscape with Wheat Sheaves', it: 'Paesaggio con Covoni di Grano', fr: 'Paysage avec meules de blé', es: 'Paisaje con gavillas de trigo', de: 'Landschaft mit Weizengarben', zh: '麦捆景观', ja: '麦わらのある風景' }, date: '1889', body: { en: 'Golden harvest textures.', it: 'Trame del raccolto dorato.', fr: 'Moisson dorée.' }, img: 'https://picsum.photos/id/26/400/300' }
+        ]
+      },
+      {
+        type: 'paintings', artist: 'Piet Mondrian',
+        works: [
+          { title: { en: 'Row of Eleven Poplars', it: 'Fila di Undici Pioppi', fr: 'Rangée de onze peupliers', es: 'Fila de once álamos', de: 'Reihe von elf Pappeln', zh: '十一棵杨树', ja: '11本のポプラ' }, date: '1908', body: { en: 'Early experiment with color.', it: 'Primo esperimento con il colore.', fr: 'Couleurs précoces.' }, img: 'https://picsum.photos/id/27/400/300' },
+          { title: { en: 'Wood with Beech Trees', it: 'Bosco con Faggi', fr: 'Bois de hêtres', es: 'Bosque de hayas', de: 'Buchenwald', zh: '山毛榉树林', ja: 'ブナの木の森' }, date: '1888', body: { en: 'An early naturalistic study.', it: 'Uno dei primi studi naturalistici.', fr: 'Étude naturaliste.' }, img: 'https://picsum.photos/id/28/400/300' }
         ]
       }
     ]
   },
   {
     id: 'red-room',
-    name: { en: 'Red Room', it: 'Sala Rossa' },
-    previewImg: 'https://picsum.photos/id/21/400/300',
+    name: { en: 'Red Room', fr: 'Salon Rouge', es: 'Sala Roja', de: 'Roter Salon', it: 'Sala Rossa', zh: '红展厅', ja: 'レッド・ルーム' },
+    previewImg: 'https://picsum.photos/id/29/400/300',
     sections: [
+      {
+        type: 'paintings', artist: 'Christo and Jean-Claude',
+        works: [
+          { title: { en: 'Wrapped Trees', it: 'Alberi Impacchettati', fr: 'Arbres emballés', es: 'Árboles envueltos', de: 'Verhüllte Bäume', zh: '被包裹的树', ja: '包まれた木々' }, date: '1998', body: { en: 'A transformation of the landscape.', it: 'Una trasformazione del paesaggio.', fr: 'Art paysager.' }, img: 'https://picsum.photos/id/30/400/300' },
+          { title: { en: 'Umbrellas', it: 'Ombrelli (The Umbrellas)', fr: 'Les Parapluies', es: 'Sombrillas', de: 'Die Schirme', zh: '伞', ja: 'アンブレラ' }, date: '1991', body: { en: 'Joint project in USA and Japan.', it: 'Progetto congiunto in USA e Giappone.', fr: 'Projet conjoint.' }, img: 'https://picsum.photos/id/31/400/300' }
+        ]
+      },
       {
         type: 'paintings', artist: 'Gerhard Richter',
         works: [
-          { title: { en: 'Seascape Series', it: 'Serie di Marine' }, date: '1998', body: { en: 'Photorealistic ocean studies.' }, img: 'https://picsum.photos/id/22/400/300' }
+          { title: { en: 'Seascape Series', it: 'Serie di Marine', fr: 'Série de Marines', es: 'Serie de paisajes marinos', de: 'Seestücke', zh: '海景系列', ja: 'シースケープ' }, date: '1998', body: { en: 'Photorealistic ocean studies.', it: 'Studi oceanici fotorealistici.', fr: 'Études de l\'océan.' }, img: 'https://picsum.photos/id/32/400/300' }
         ]
       }
     ]
   },
   {
     id: 'north-gallery',
-    name: { en: 'North Gallery', it: 'Galleria Nord' },
-    previewImg: 'https://picsum.photos/id/23/400/300',
+    name: { en: 'North Gallery', fr: 'Galerie Nord', es: 'Galería Norte', de: 'Nordgalerie', it: 'Galleria Nord', zh: '北画廊', ja: '北のギャラリー' },
+    previewImg: 'https://picsum.photos/id/33/400/300',
     sections: [
       {
         type: 'paintings', artist: 'Andreas Gursky',
         works: [
-          { title: { en: 'Aletsch Glacier 1', it: 'Ghiacciaio dell\'Aletsch' }, date: '1993', body: { en: 'Stark mountain photography.' }, img: 'https://picsum.photos/id/24/400/300' }
+          { title: { en: 'Aletsch Glacier 1', it: 'Ghiacciaio dell\'Aletsch 1', fr: 'Glacier d\'Aletsch 1', es: 'Glaciar Aletsch 1', de: 'Aletschgletscher 1', zh: '阿莱奇冰川 1', ja: 'アレッチ氷河 1' }, date: '1993', body: { en: 'Stark mountain photography.', it: 'Cruda fotografia di montagna.', fr: 'Échelle massive.' }, img: 'https://picsum.photos/id/34/400/300' },
+          { title: { en: 'Aletsch Glacier 2', it: 'Ghiacciaio dell\'Aletsch 2', fr: 'Glacier d\'Aletsch 2', es: 'Glaciar Aletsch 2', de: 'Aletschgletscher 2', zh: '阿莱奇冰川 2', ja: 'アレッチ氷河 2' }, date: '1993', body: { en: 'Massive scale and detail.', it: 'Scala e dettaglio massicci.', fr: 'Détail glaciaire.' }, img: 'https://picsum.photos/id/35/400/300' }
+        ]
+      },
+      {
+        type: 'paintings', artist: 'Olafur Eliasson',
+        works: [
+          { title: { en: 'The Weather Project', it: 'The Weather Project', fr: 'Le Projet Météo', es: 'El proyecto del clima', de: 'Das Wetterprojekt', zh: '天气项目', ja: 'ウェザー・プロジェクト' }, date: '2003', body: { en: 'Artificial sun in the Turbine Hall.', it: 'Sole artificiale nella Turbine Hall.', fr: 'Soleil artificiel.' }, img: 'https://picsum.photos/id/36/400/300' },
+          { title: { en: 'Ice Watch', it: 'Ice Watch', fr: 'Montre de Glace', es: 'Reloj de hielo', de: 'Eisuhr', zh: '冰表', ja: 'アイス・ウォッチ' }, date: '2014', body: { en: 'Melting glacial ice blocks.', it: 'Blocchi di ghiaccio glaciale che si sciolgono.', fr: 'Glace fondante.' }, img: 'https://picsum.photos/id/37/400/300' }
         ]
       }
     ]
   },
   {
     id: 'pleasure-garden',
-    name: { en: 'Pleasure Garden', it: 'Giardino di Piacere' },
-    previewImg: 'https://picsum.photos/id/25/400/300',
+    name: { en: 'Pleasure Garden', fr: 'Jardin d\'Agrément', es: 'Jardín de recreo', de: 'Lustgarten', it: 'Giardino di Piacere', zh: '游乐园', ja: 'プレジャー・ガーデン' },
+    previewImg: 'https://picsum.photos/id/38/400/300',
     sections: [
       {
         type: 'paintings', artist: 'Claude Monet',
         works: [
-          { title: { en: 'Water Lily Pond', it: 'Lo Stagno delle Ninfee' }, date: '1899', body: { en: 'The famous Japanese bridge.' }, img: 'https://picsum.photos/id/26/400/300' }
+          { title: { en: 'The Artist\'s Garden at Giverny', it: 'Il Giardino dell\'Artista a Giverny', fr: 'Le Jardin de l\'artiste à Giverny', es: 'El jardín del artista en Giverny', de: 'Der Garten des Künstlers in Giverny', zh: '吉维尼的小花园', ja: 'ジヴェルニーの庭' }, date: '1900', body: { en: 'Floral explosion of purple.', it: 'Esplosione floreale di viola.', fr: 'Explosion florale.' }, img: 'https://picsum.photos/id/39/400/300' },
+          { title: { en: 'Pathway in Monet\'s Garden', it: 'Sentiero nel Giardino di Monet', fr: 'Allée du jardin de Monet', es: 'Sendero en el jardín de Monet', de: 'Weg im Garten von Monet', zh: '莫奈花园的小道', ja: 'モネの庭o小道' }, date: '1902', body: { en: 'Dappled light on a garden path.', it: 'Luce screziata su un sentiero di giardino.', fr: 'Lumière tachetée.' }, img: 'https://picsum.photos/id/40/400/300' },
+          { title: { en: 'Water Lily Pond', it: 'Lo Stagno delle Ninfee', fr: 'Le Bassin aux nymphéas', es: 'El estanque de los lirios', de: 'Der Seerosenteich', zh: '睡莲池', ja: '睡蓮の池' }, date: '1899', body: { en: 'The famous Japanese bridge.', it: 'Il famoso ponte giapponese.', fr: 'Pont japonais.' }, img: 'https://picsum.photos/id/41/400/300' }
         ]
       }
     ]
@@ -204,7 +247,7 @@ function renderLobby() {
   const grid = document.getElementById('rooms-grid');
   grid.innerHTML = ROOMS.map(r => `
     <div class="room-card" onclick="enterRoom('${r.id}')">
-      <img src="${r.previewImg}" class="room-card-preview">
+      <img src="${r.previewImg}" class="room-card-preview" alt="${getTxt(r.name)}">
       <div class="room-card-name">${getTxt(r.name)}</div>
       <div style="color:var(--gold); font-size:0.8rem; margin-top:0.5rem;">${t('enterRoom')}</div>
     </div>`).join('');
@@ -245,7 +288,10 @@ function enterRoom(id) {
 function toggleAudio(btn, text) {
   if (btn.classList.contains('playing')) { window.speechSynthesis.cancel(); btn.classList.remove('playing'); btn.textContent = t('listenBtn'); return; }
   window.speechSynthesis.cancel();
-  document.querySelectorAll('.audio-btn').forEach(b => { b.classList.remove('playing'); b.textContent = t('listenBtn'); });
+  document.querySelectorAll('.audio-btn').forEach(b => {
+    b.classList.remove('playing');
+    b.textContent = t('listenBtn');
+  });
   const ut = new SpeechSynthesisUtterance(text);
   const codes = { en: 'en-GB', fr: 'fr-FR', de: 'de-DE', es: 'es-ES', it: 'it-IT', zh: 'zh-CN', ja: 'ja-JP' };
   ut.lang = codes[currentLang] || 'en-GB';
@@ -272,4 +318,3 @@ window.onload = () => { setLang('en'); };
 </script>
 </body>
 </html>
-
