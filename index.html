@@ -7,1922 +7,316 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
 :root {
-  --cream: #f5f0e8;
-  --parchment: #e8dfc8;
-  --oak: #6b4c2a;
-  --dark: #1a1208;
-  --gold: #c9a84c;
-  --gold-light: #e8c96a;
-  --ink: #2c1f0e;
-  --panel-bg: rgba(26, 18, 8, 0.95);
-  --panel-border: rgba(201, 168, 76, 0.6);
+  --cream: #f5f0e8; --parchment: #e8dfc8; --oak: #6b4c2a; --dark: #1a1208;
+  --gold: #c9a84c; --gold-light: #e8c96a; --ink: #2c1f0e;
+  --panel-bg: rgba(26, 18, 8, 0.95); --panel-border: rgba(201, 168, 76, 0.6);
 }
-
-body {
-  background: var(--dark);
-  color: var(--cream);
-  font-family: 'Cormorant Garamond', Georgia, serif;
-  min-height: 100vh;
-  overflow-x: hidden;
-}
-
-/* ── SCREENS ── */
+body { background: var(--dark); color: var(--cream); font-family: 'Cormorant Garamond', Georgia, serif; min-height: 100vh; overflow-x: hidden; }
 .screen { display: none; }
 .screen.active { display: block; }
-
-/* ── HEADER ── */
-header {
-  text-align: center;
-  padding: 3rem 2rem 2rem;
-  background: linear-gradient(to bottom, #0d0a04, var(--dark));
-  border-bottom: 1px solid rgba(201,168,76,0.25);
-}
-header::before {
-  content: '';
-  display: block;
-  width: 80px; height: 1px;
-  background: var(--gold);
-  margin: 0 auto 1.2rem;
-  opacity: 0.7;
-}
-.property-name {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(1rem, 2.5vw, 1.3rem);
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: var(--gold);
-  font-weight: 400;
-  margin-bottom: 0.5rem;
-}
-h1 {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(2rem, 5vw, 3.5rem);
-  font-weight: 700;
-  color: var(--cream);
-  line-height: 1.1;
-  margin-bottom: 1rem;
-}
-.subtitle {
-  font-size: 1.1rem;
-  color: rgba(245,240,232,0.55);
-  font-style: italic;
-  font-weight: 300;
-  letter-spacing: 0.05em;
-}
-header::after {
-  content: '';
-  display: block;
-  width: 80px; height: 1px;
-  background: var(--gold);
-  margin: 1.5rem auto 0;
-  opacity: 0.7;
-}
-
-/* ── ROOM LOBBY ── */
-.lobby {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 3rem 2rem 5rem;
-}
-.lobby-intro {
-  text-align: center;
-  margin-bottom: 3rem;
-}
-.lobby-intro p {
-  font-size: 1.05rem;
-  color: rgba(245,240,232,0.55);
-  font-style: italic;
-  letter-spacing: 0.06em;
-}
-
-.rooms-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 2rem;
-}
-
-.room-card {
-  position: relative;
-  cursor: pointer;
-  border: 1px solid rgba(201,168,76,0.25);
-  background: rgba(255,255,255,0.02);
-  padding: 2rem 1.8rem 1.6rem;
-  transition: border-color 0.3s, background 0.3s, transform 0.3s;
-  overflow: hidden;
-}
-.room-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--gold), transparent);
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-.room-card:hover {
-  border-color: rgba(201,168,76,0.6);
-  background: rgba(201,168,76,0.04);
-  transform: translateY(-4px);
-}
-.room-card:hover::before { opacity: 1; }
-
-.room-card-preview {
-  width: 100%;
-  height: 120px;
-  margin-bottom: 1.3rem;
-  overflow: hidden;
-  opacity: 0.8;
-  transition: opacity 0.3s;
-}
-.room-card:hover .room-card-preview { opacity: 1; }
-
-.room-card-number {
-  font-size: 0.65rem;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--gold);
-  opacity: 0.6;
-  margin-bottom: 0.4rem;
-}
-.room-card-name {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.35rem;
-  color: var(--cream);
-  margin-bottom: 0.5rem;
-  line-height: 1.2;
-}
-.room-card-artists {
-  font-size: 0.82rem;
-  color: rgba(245,240,232,0.45);
-  font-style: italic;
-  line-height: 1.5;
-}
-.room-card-cta {
-  margin-top: 1.2rem;
-  font-size: 0.72rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--gold);
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-.room-card:hover .room-card-cta { opacity: 0.8; }
-
-/* ── ROOM VIEW ── */
-.room-view { min-height: 100vh; }
-
-.room-header {
-  text-align: center;
-  padding: 2.5rem 2rem 2rem;
-  background: linear-gradient(to bottom, #0d0a04, var(--dark));
-  border-bottom: 1px solid rgba(201,168,76,0.2);
-  position: relative;
-}
-.back-btn {
-  position: absolute;
-  left: 2rem;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: 1px solid rgba(201,168,76,0.4);
-  color: var(--gold);
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 0.8rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-  transition: background 0.2s, border-color 0.2s;
-}
-.back-btn:hover {
-  background: rgba(201,168,76,0.1);
-  border-color: var(--gold);
-}
-.room-header-label {
-  font-size: 0.7rem;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--gold);
-  opacity: 0.7;
-  margin-bottom: 0.4rem;
-}
-.room-header-title {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(1.6rem, 4vw, 2.8rem);
-  color: var(--cream);
-}
-
-/* ── WALL ── */
-.wall-container {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 3rem 2rem 5rem;
-}
-.section-label {
-  font-family: 'Playfair Display', serif;
-  font-size: 0.75rem;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--gold);
-  opacity: 0.7;
-  margin-bottom: 2rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-.section-label::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: rgba(201,168,76,0.2);
-}
-
-/* Audio card (for poetry/text passages) */
-.audio-card {
-  border: 1px solid rgba(201,168,76,0.3);
-  background: rgba(255,255,255,0.02);
-  padding: 2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-}
-.audio-card-label {
-  font-size: 0.65rem;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--gold);
-  opacity: 0.7;
-}
-.audio-card-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.3rem;
-  color: var(--cream);
-  font-style: italic;
-}
-.audio-card-author {
-  font-size: 0.9rem;
-  color: rgba(245,240,232,0.5);
-}
-.audio-card-excerpt {
-  font-size: 0.95rem;
-  color: rgba(245,240,232,0.7);
-  font-style: italic;
-  line-height: 1.8;
-  border-left: 2px solid rgba(201,168,76,0.4);
-  padding-left: 1rem;
-  margin-top: 0.3rem;
-}
-.audio-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  background: none;
-  border: 1px solid rgba(201,168,76,0.4);
-  color: var(--gold);
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 0.82rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  padding: 0.5rem 1.1rem;
-  cursor: pointer;
-  transition: background 0.2s, border-color 0.2s;
-  width: fit-content;
-}
-.audio-btn:hover {
-  background: rgba(201,168,76,0.1);
-  border-color: var(--gold);
-}
-.audio-btn.playing {
-  background: rgba(201,168,76,0.15);
-  border-color: var(--gold);
-}
-
-.wall {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 3rem 2.5rem;
-  align-items: start;
-  margin-bottom: 3rem;
-}
-
-/* ── PAINTING ── */
-.painting-wrapper {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  cursor: pointer;
-}
-.frame {
-  position: relative;
-  padding: 12px;
-  background: linear-gradient(135deg, #8B6914 0%, #c9a84c 25%, #6b4c2a 50%, #c9a84c 75%, #8B6914 100%);
-  box-shadow: 0 0 0 2px #3d2a0a, 0 8px 30px rgba(0,0,0,0.8), inset 0 0 0 1px rgba(255,220,100,0.3);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  width: 100%;
-}
-.frame::before {
-  content: '';
-  position: absolute;
-  inset: 4px;
-  border: 1px solid rgba(255,220,100,0.2);
-  pointer-events: none;
-  z-index: 2;
-}
-.painting-wrapper:hover .frame {
-  transform: translateY(-4px);
-  box-shadow: 0 0 0 2px #5a3e0e, 0 16px 40px rgba(0,0,0,0.9), 0 0 20px rgba(201,168,76,0.2), inset 0 0 0 1px rgba(255,220,100,0.4);
-}
-.canvas {
-  display: block;
-  width: 100%;
-  aspect-ratio: 4/3;
-  object-fit: cover;
-  position: relative;
-  z-index: 1;
-  filter: brightness(0.92) saturate(0.9);
-  transition: filter 0.3s ease;
-}
-.painting-wrapper:hover .canvas { filter: brightness(1.05) saturate(1.05); }
-
-.plate { margin-top: 0.9rem; text-align: center; }
-.plate-number {
-  display: inline-block;
-  font-family: 'Playfair Display', serif;
-  font-size: 0.7rem;
-  letter-spacing: 0.25em;
-  color: var(--gold);
-  opacity: 0.6;
-  text-transform: uppercase;
-  border-top: 1px solid rgba(201,168,76,0.3);
-  padding-top: 0.5rem;
-}
-.plate-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 0.95rem;
-  color: rgba(245,240,232,0.75);
-  margin-top: 0.2rem;
-  font-style: italic;
-}
-.plate-artist {
-  font-size: 0.75rem;
-  color: rgba(245,240,232,0.4);
-  margin-top: 0.1rem;
-}
-
-/* Per-painting audio button */
-.painting-audio-btn {
-  margin-top: 0.6rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: none;
-  border: 1px solid rgba(201,168,76,0.3);
-  color: rgba(201,168,76,0.7);
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 0.72rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  padding: 0.3rem 0.8rem;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.painting-audio-btn:hover, .painting-audio-btn.playing {
-  background: rgba(201,168,76,0.1);
-  border-color: var(--gold);
-  color: var(--gold);
-}
-
-/* ── TOOLTIP ── */
-.tooltip {
-  position: fixed;
-  z-index: 1000;
-  width: 300px;
-  background: var(--panel-bg);
-  border: 1px solid var(--panel-border);
-  padding: 1.5rem;
-  pointer-events: none;
-  opacity: 0;
-  transform: translateY(6px);
-  transition: opacity 0.2s ease, transform 0.2s ease;
-  backdrop-filter: blur(12px);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.7);
-}
-.tooltip.visible { opacity: 1; transform: translateY(0); }
-.tooltip::before {
-  content: '';
-  display: block;
-  width: 30px; height: 1px;
-  background: var(--gold);
-  margin-bottom: 0.8rem;
-  opacity: 0.7;
-}
-.tooltip-label { font-size: 0.62rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.3rem; opacity: 0.8; }
-.tooltip-title { font-family: 'Playfair Display', serif; font-size: 1.15rem; color: var(--cream); margin-bottom: 0.2rem; line-height: 1.2; }
-.tooltip-artist { font-size: 0.82rem; color: rgba(245,240,232,0.55); font-style: italic; margin-bottom: 0.7rem; }
-.tooltip-date { display: inline-block; font-size: 0.68rem; letter-spacing: 0.1em; color: var(--gold); border: 1px solid rgba(201,168,76,0.35); padding: 0.12rem 0.5rem; margin-bottom: 0.8rem; }
-.tooltip-divider { height: 1px; background: rgba(201,168,76,0.2); margin-bottom: 0.8rem; }
-.tooltip-body { font-size: 0.88rem; line-height: 1.7; color: rgba(245,240,232,0.78); font-weight: 300; }
-
-/* ── FOOTER / LANGUAGE BAR ── */
-.footer-bar {
-  border-top: 1px solid rgba(201,168,76,0.15);
-  padding: 1.5rem 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 1rem;
-  background: linear-gradient(to top, #0d0a04, var(--dark));
-}
-.footer-copy {
-  font-size: 0.72rem;
-  letter-spacing: 0.1em;
-  color: rgba(245,240,232,0.25);
-  text-transform: uppercase;
-}
-.lang-selector {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-}
-.lang-selector-label {
-  font-size: 0.68rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: rgba(245,240,232,0.35);
-  margin-right: 0.3rem;
-}
-.lang-btn {
-  background: none;
-  border: 1px solid rgba(201,168,76,0.25);
-  color: rgba(245,240,232,0.45);
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 0.8rem;
-  padding: 0.25rem 0.65rem;
-  cursor: pointer;
-  transition: all 0.2s;
-  letter-spacing: 0.05em;
-}
-.lang-btn:hover, .lang-btn.active {
-  border-color: rgba(201,168,76,0.6);
-  color: var(--gold);
-  background: rgba(201,168,76,0.06);
-}
-
-/* ── CSS PAINTING CANVASES ── */
-.css-painting {
-  width: 100%;
-  aspect-ratio: 4/3;
-  display: block;
-}
-
-@media (max-width: 650px) {
-  .back-btn { position: static; transform: none; margin-bottom: 1rem; }
-  .room-header { display: flex; flex-direction: column; align-items: center; }
-  .tooltip { width: 240px; }
-  .rooms-grid, .wall { grid-template-columns: 1fr; }
-}
+header { text-align: center; padding: 3rem 2rem 2rem; background: linear-gradient(to bottom, #0d0a04, var(--dark)); border-bottom: 1px solid rgba(201,168,76,0.25); }
+header::before { content: ''; display: block; width: 80px; height: 1px; background: var(--gold); margin: 0 auto 1.2rem; opacity: 0.7; }
+.property-name { font-family: 'Playfair Display', serif; font-size: clamp(1rem, 2.5vw, 1.3rem); letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); font-weight: 400; margin-bottom: 0.5rem; }
+h1 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 700; color: var(--cream); line-height: 1.1; margin-bottom: 1rem; }
+.subtitle { font-size: 1.1rem; color: rgba(245,240,232,0.55); font-style: italic; font-weight: 300; letter-spacing: 0.05em; }
+.lobby { max-width: 1100px; margin: 0 auto; padding: 3rem 2rem 5rem; }
+.rooms-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 2rem; }
+.room-card { position: relative; cursor: pointer; border: 1px solid rgba(201,168,76,0.25); background: rgba(255,255,255,0.02); padding: 2rem 1.8rem 1.6rem; transition: all 0.3s; overflow: hidden; }
+.room-card:hover { border-color: rgba(201,168,76,0.6); background: rgba(201,168,76,0.04); transform: translateY(-4px); }
+.room-card-preview { width: 100%; height: 120px; margin-bottom: 1.3rem; opacity: 0.8; }
+.room-card-name { font-family: 'Playfair Display', serif; font-size: 1.35rem; color: var(--cream); margin-bottom: 0.5rem; }
+.room-header { text-align: center; padding: 2.5rem 2rem 2rem; background: linear-gradient(to bottom, #0d0a04, var(--dark)); border-bottom: 1px solid rgba(201,168,76,0.2); position: relative; }
+.back-btn { position: absolute; left: 2rem; top: 50%; transform: translateY(-50%); background: none; border: 1px solid rgba(201,168,76,0.4); color: var(--gold); padding: 0.5rem 1rem; cursor: pointer; text-transform: uppercase; letter-spacing: 0.2em; font-size: 0.8rem; }
+.wall-container { max-width: 1100px; margin: 0 auto; padding: 3rem 2rem 5rem; }
+.section-label { font-family: 'Playfair Display', serif; font-size: 0.75rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 2rem; display: flex; align-items: center; gap: 1rem; }
+.section-label::after { content: ''; flex: 1; height: 1px; background: rgba(201,168,76,0.2); }
+.wall { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 3rem 2.5rem; margin-bottom: 4rem; }
+.frame { padding: 12px; background: linear-gradient(135deg, #8B6914 0%, #c9a84c 25%, #6b4c2a 50%, #c9a84c 75%, #8B6914 100%); box-shadow: 0 8px 30px rgba(0,0,0,0.8); }
+.tooltip { position: fixed; z-index: 1000; width: 320px; background: var(--panel-bg); border: 1px solid var(--panel-border); padding: 1.5rem; pointer-events: none; opacity: 0; transition: all 0.2s; backdrop-filter: blur(12px); color: var(--cream); }
+.tooltip.visible { opacity: 1; }
+.footer-bar { border-top: 1px solid rgba(201,168,76,0.15); padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center; background: #0d0a04; }
+.lang-btn { background: none; border: 1px solid rgba(201,168,76,0.25); color: rgba(245,240,232,0.45); padding: 0.25rem 0.65rem; cursor: pointer; margin-left: 5px; font-family: 'Cormorant Garamond'; }
+.lang-btn.active { border-color: var(--gold); color: var(--gold); background: rgba(201,168,76,0.1); }
+.audio-card { border: 1px solid rgba(201,168,76,0.3); background: rgba(255,255,255,0.02); padding: 2rem; margin-bottom: 3rem; }
+.audio-btn { background: none; border: 1px solid var(--gold); color: var(--gold); padding: 0.4rem 0.8rem; cursor: pointer; text-transform: uppercase; margin-top: 0.8rem; font-size: 0.7rem; letter-spacing: 0.1em; transition: 0.2s; }
+.audio-btn:hover { background: rgba(201, 168, 76, 0.1); }
+.audio-btn.playing { background: var(--gold); color: var(--dark); }
 </style>
 </head>
 <body>
 
-<!-- ══════════════════════════════
-     SCREEN 1: LOBBY
-══════════════════════════════ -->
 <div id="screen-lobby" class="screen active">
   <header>
-    <p class="property-name" data-i18n="property">Petworth House · National Trust</p>
-    <h1 data-i18n="title">The Collection</h1>
-    <p class="subtitle" data-i18n="subtitle">Select a room to begin your tour</p>
+    <p class="property-name" data-i18n="property"></p>
+    <h1 data-i18n="title"></h1>
+    <p class="subtitle" data-i18n="subtitle"></p>
   </header>
-
   <main class="lobby">
-    <div class="lobby-intro">
-      <p data-i18n="lobbyIntro">Seven rooms. Centuries of art. Choose where to begin.</p>
-    </div>
     <div class="rooms-grid" id="rooms-grid"></div>
   </main>
-
-  <footer class="footer-bar">
-    <span class="footer-copy" data-i18n="footerCopy">Petworth House · Interactive Gallery Tour</span>
-    <div class="lang-selector">
-      <span class="lang-selector-label" data-i18n="langLabel">Language</span>
-      <button class="lang-btn active" onclick="setLang('en')">EN</button>
-      <button class="lang-btn" onclick="setLang('fr')">FR</button>
-      <button class="lang-btn" onclick="setLang('de')">DE</button>
-      <button class="lang-btn" onclick="setLang('es')">ES</button>
-      <button class="lang-btn" onclick="setLang('it')">IT</button>
-      <button class="lang-btn" onclick="setLang('zh')">中文</button>
-      <button class="lang-btn" onclick="setLang('ja')">日本語</button>
-    </div>
-  </footer>
 </div>
 
-<!-- ══════════════════════════════
-     SCREEN 2: ROOM VIEW
-══════════════════════════════ -->
 <div id="screen-room" class="screen">
   <header class="room-header">
-    <button class="back-btn" onclick="goToLobby()" data-i18n="backBtn">← All Rooms</button>
-    <div class="room-header-label" id="room-header-label" data-i18n="roomLabel">Gallery Room</div>
+    <button class="back-btn" onclick="goToLobby()" data-i18n="backBtn"></button>
     <h1 class="room-header-title" id="room-header-title"></h1>
   </header>
-
   <div class="wall-container" id="wall-container"></div>
-
-  <footer class="footer-bar">
-    <span class="footer-copy" data-i18n="footerCopy">Petworth House · Interactive Gallery Tour</span>
-    <div class="lang-selector">
-      <span class="lang-selector-label" data-i18n="langLabel">Language</span>
-      <button class="lang-btn active" onclick="setLang('en')">EN</button>
-      <button class="lang-btn" onclick="setLang('fr')">FR</button>
-      <button class="lang-btn" onclick="setLang('de')">DE</button>
-      <button class="lang-btn" onclick="setLang('es')">ES</button>
-      <button class="lang-btn" onclick="setLang('it')">IT</button>
-      <button class="lang-btn" onclick="setLang('zh')">中文</button>
-      <button class="lang-btn" onclick="setLang('ja')">日本語</button>
-    </div>
-  </footer>
 </div>
 
-<!-- TOOLTIP -->
 <div class="tooltip" id="tooltip">
-  <div class="tooltip-label" data-i18n="artworkLabel">Artwork</div>
-  <div class="tooltip-title" id="tt-title"></div>
-  <div class="tooltip-artist" id="tt-artist"></div>
-  <div class="tooltip-date" id="tt-date"></div>
-  <div class="tooltip-divider"></div>
-  <div class="tooltip-body" id="tt-body"></div>
+  <div id="tt-title" style="font-family:'Playfair Display'; font-size:1.2rem;"></div>
+  <div id="tt-artist" style="font-style:italic; margin-bottom:0.5rem;"></div>
+  <hr style="border:0; border-top:1px solid var(--gold); margin-bottom:0.5rem; opacity:0.3;">
+  <div id="tt-body" style="font-size:0.9rem; line-height:1.5;"></div>
 </div>
+
+<footer class="footer-bar">
+  <span style="font-size:0.7rem; color:gray;" data-i18n="footerCopy"></span>
+  <div id="lang-selectors"></div>
+</footer>
 
 <script>
-/* ══════════════════════════════════════════════
-   TRANSLATIONS
-══════════════════════════════════════════════ */
+let currentLang = 'en';
+let currentRoomId = null;
+
 const i18n = {
-  en: {
-    property: 'Petworth House · National Trust',
-    title: 'The Collection',
-    subtitle: 'Select a room to begin your tour',
-    lobbyIntro: 'Seven rooms. Centuries of art. Choose where to begin.',
-    backBtn: '← All Rooms',
-    roomLabel: 'Gallery Room',
-    artworkLabel: 'Artwork',
-    langLabel: 'Language',
-    footerCopy: 'Petworth House · Interactive Gallery Tour',
-    enterRoom: 'Enter Room →',
-    listenBtn: '▶ Listen',
-    stopBtn: '■ Stop',
-    audioLabel: 'Audio Passage',
-    artworksLabel: 'Artworks on Display',
-    readAloud: '▶ Read Aloud',
-    stopRead: '■ Stop',
-  },
-  fr: {
-    property: 'Petworth House · National Trust',
-    title: 'La Collection',
-    subtitle: 'Sélectionnez une salle pour commencer votre visite',
-    lobbyIntro: 'Sept salles. Des siècles d\'art. Choisissez par où commencer.',
-    backBtn: '← Toutes les salles',
-    roomLabel: 'Salle de galerie',
-    artworkLabel: 'Œuvre',
-    langLabel: 'Langue',
-    footerCopy: 'Petworth House · Visite interactive de la galerie',
-    enterRoom: 'Entrer →',
-    listenBtn: '▶ Écouter',
-    stopBtn: '■ Arrêter',
-    audioLabel: 'Extrait audio',
-    artworksLabel: 'Œuvres exposées',
-    readAloud: '▶ Lire à voix haute',
-    stopRead: '■ Arrêter',
-  },
-  de: {
-    property: 'Petworth House · National Trust',
-    title: 'Die Sammlung',
-    subtitle: 'Wählen Sie einen Raum für Ihre Tour',
-    lobbyIntro: 'Sieben Räume. Jahrhunderte der Kunst. Wählen Sie, wo Sie beginnen.',
-    backBtn: '← Alle Räume',
-    roomLabel: 'Galerieraum',
-    artworkLabel: 'Kunstwerk',
-    langLabel: 'Sprache',
-    footerCopy: 'Petworth House · Interaktive Galerietour',
-    enterRoom: 'Raum betreten →',
-    listenBtn: '▶ Anhören',
-    stopBtn: '■ Stop',
-    audioLabel: 'Audiopassage',
-    artworksLabel: 'Ausgestellte Werke',
-    readAloud: '▶ Vorlesen',
-    stopRead: '■ Stop',
-  },
-  es: {
-    property: 'Petworth House · National Trust',
-    title: 'La Colección',
-    subtitle: 'Seleccione una sala para comenzar su visita',
-    lobbyIntro: 'Siete salas. Siglos de arte. Elija por dónde empezar.',
-    backBtn: '← Todas las salas',
-    roomLabel: 'Sala de galería',
-    artworkLabel: 'Obra de arte',
-    langLabel: 'Idioma',
-    footerCopy: 'Petworth House · Tour interactivo de la galería',
-    enterRoom: 'Entrar →',
-    listenBtn: '▶ Escuchar',
-    stopBtn: '■ Detener',
-    audioLabel: 'Pasaje de audio',
-    artworksLabel: 'Obras expuestas',
-    readAloud: '▶ Leer en voz alta',
-    stopRead: '■ Detener',
-  },
-  it: {
-    property: 'Petworth House · National Trust',
-    title: 'La Collezione',
-    subtitle: 'Seleziona una sala per iniziare il tour',
-    lobbyIntro: 'Sette sale. Secoli di arte. Scegli da dove iniziare.',
-    backBtn: '← Tutte le sale',
-    roomLabel: 'Sala della galleria',
-    artworkLabel: 'Opera d\'arte',
-    langLabel: 'Lingua',
-    footerCopy: 'Petworth House · Tour interattivo della galleria',
-    enterRoom: 'Entra →',
-    listenBtn: '▶ Ascolta',
-    stopBtn: '■ Ferma',
-    audioLabel: 'Passaggio audio',
-    artworksLabel: 'Opere esposte',
-    readAloud: '▶ Leggi ad alta voce',
-    stopRead: '■ Ferma',
-  },
-  zh: {
-    property: 'Petworth House · 国家信托',
-    title: '艺术收藏',
-    subtitle: '选择一个展厅开始您的参观',
-    lobbyIntro: '七个展厅，数世纪的艺术。请选择您的起点。',
-    backBtn: '← 所有展厅',
-    roomLabel: '展览厅',
-    artworkLabel: '艺术品',
-    langLabel: '语言',
-    footerCopy: 'Petworth House · 互动画廊之旅',
-    enterRoom: '进入展厅 →',
-    listenBtn: '▶ 聆听',
-    stopBtn: '■ 停止',
-    audioLabel: '音频片段',
-    artworksLabel: '展出作品',
-    readAloud: '▶ 朗读',
-    stopRead: '■ 停止',
-  },
-  ja: {
-    property: 'ペットワース・ハウス · ナショナル・トラスト',
-    title: 'コレクション',
-    subtitle: '部屋を選んでツアーを始めてください',
-    lobbyIntro: '7つの部屋、何世紀にもわたる芸術。どこから始めますか。',
-    backBtn: '← 全ての部屋',
-    roomLabel: 'ギャラリーの部屋',
-    artworkLabel: '美術品',
-    langLabel: '言語',
-    footerCopy: 'ペットワース・ハウス · インタラクティブ・ギャラリーツアー',
-    enterRoom: '部屋に入る →',
-    listenBtn: '▶ 聴く',
-    stopBtn: '■ 停止',
-    audioLabel: '朗読',
-    artworksLabel: '展示作品',
-    readAloud: '▶ 読み上げ',
-    stopRead: '■ 停止',
-  }
+  en: { property: 'Petworth House · National Trust', title: 'The Collection', subtitle: 'Select a room to begin your tour', backBtn: '← All Rooms', enterRoom: 'Enter Room →', listenBtn: '▶ Listen', stopBtn: '■ Stop', footerCopy: 'Petworth House Tour' },
+  fr: { property: 'Petworth House · National Trust', title: 'La Collection', subtitle: 'Sélectionnez une salle', backBtn: '← Retour', enterRoom: 'Entrer →', listenBtn: '▶ Écouter', stopBtn: '■ Arrêter', footerCopy: 'Visite Petworth' },
+  de: { property: 'Petworth House', title: 'Die Sammlung', subtitle: 'Wählen Sie einen Raum', backBtn: '← Alle Räume', enterRoom: 'Eintreten →', listenBtn: '▶ Anhören', stopBtn: '■ Stopp', footerCopy: 'Petworth Tour' },
+  es: { property: 'Petworth House', title: 'La Colección', subtitle: 'Seleccione una sala', backBtn: '← Atrás', enterRoom: 'Entrar →', listenBtn: '▶ Escuchar', stopBtn: '■ Parar', footerCopy: 'Tour Petworth' },
+  it: { property: 'Petworth House', title: 'La Collezione', subtitle: 'Seleziona una sala', backBtn: '← Indietro', enterRoom: 'Entra →', listenBtn: '▶ Ascolta', stopBtn: '■ Ferma', footerCopy: 'Tour Petworth' },
+  zh: { property: 'Petworth House', title: '艺术收藏', subtitle: '选择一个展厅', backBtn: '← 返回', enterRoom: '进入 →', listenBtn: '▶ 聆听', stopBtn: '■ 停止', footerCopy: '互动画廊之旅' },
+  ja: { property: 'ペットワース・ハウス', title: 'コレクション', subtitle: '部屋を選んでください', backBtn: '← 戻る', enterRoom: '入る →', listenBtn: '▶ 聴く', stopBtn: '■ 停止', footerCopy: 'ギャラリーツアー' }
 };
 
-let currentLang = 'en';
-const t = key => (i18n[currentLang] && i18n[currentLang][key]) || i18n.en[key] || key;
-
-function applyTranslations() {
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    const key = el.getAttribute('data-i18n');
-    el.textContent = t(key);
-  });
-  document.querySelectorAll('.audio-btn').forEach(btn => {
-    if (!btn.classList.contains('playing')) btn.textContent = t('listenBtn');
-  });
-  document.querySelectorAll('.painting-audio-btn').forEach(btn => {
-    if (!btn.classList.contains('playing')) btn.textContent = t('readAloud');
-  });
-  document.querySelectorAll('.room-card-cta').forEach(el => {
-    el.textContent = t('enterRoom');
-  });
-  document.querySelectorAll('.lang-btn').forEach(btn => {
-    btn.classList.remove('active');
-    if (btn.getAttribute('onclick').includes(`'${currentLang}'`)) btn.classList.add('active');
-  });
-}
-
-function setLang(lang) {
-  currentLang = lang;
-  applyTranslations();
-  // Re-render lobby cards if on lobby
-  if (document.getElementById('screen-lobby').classList.contains('active')) {
-    renderLobby();
-  }
-}
-
-/* ══════════════════════════════════════════════
-   DATA: ROOMS AND PAINTINGS
-══════════════════════════════════════════════ */
+const createArt = (c) => `<svg viewBox="0 0 400 300"><rect width="100%" height="100%" fill="${c}"/><rect x="20" y="20" width="360" height="260" fill="none" stroke="white" stroke-opacity="0.1"/></svg>`;
 
 const ROOMS = [
   {
     id: 'marble-hall',
-    name: 'Marble Hall',
-    artists: 'Constable · Turner · Friedrich · Wordsworth · Blake',
+    name: { en: 'Marble Hall', fr: 'Galerie des Marbres', de: 'Marmorsaal', es: 'Salón de Mármol', it: 'Sala dei Marmi', zh: '大理石大厅', ja: 'マーブル・ホール' },
     previewColor: '#1a2a3a',
     sections: [
       {
-        type: 'paintings',
-        artist: 'John Constable',
+        type: 'paintings', artist: 'John Constable',
         works: [
-          {
-            title: 'Stonehenge',
-            date: 'c. 1835',
-            body: 'One of Constable\'s final major works, depicting the ancient megalithic monument beneath a turbulent sky with a double rainbow. Constable described the scene as "the mysterious monument of Stonehenge, standing remote on a bare and boundless heath." The dramatic sky, which he studied obsessively, gives the prehistoric stones a sublime and melancholy quality.',
-            svg: svgStonehenge()
-          },
-          {
-            title: 'The Hay Wain',
-            date: '1821',
-            body: 'Perhaps the most celebrated landscape in British art, The Hay Wain depicts a hay wagon crossing the River Stour at Flatford Mill in Suffolk. The painting captures the shimmering light of a summer morning with extraordinary naturalism. It caused a sensation when exhibited in Paris in 1824, profoundly influencing the French Romantic painters, especially Delacroix.',
-            svg: svgHayWain()
-          },
-          {
-            title: 'The Cornfield',
-            date: '1826',
-            body: 'A Suffolk lane with a boy drinking from a stream while a flock of sheep passes. Constable described this as one of his most complete paintings. The richly detailed foreground — wild flowers, butterflies, the cool shadow of overhanging elms — contrasts with the luminous golden cornfield beyond, a meditation on the beauty of the English countryside.',
-            svg: svgCornfield()
-          }
+          { title: { en: 'Stonehenge', it: 'Stonehenge', fr: 'Stonehenge', es: 'Stonehenge', de: 'Stonehenge', zh: '巨石阵', ja: 'ストーンヘンジ' }, date: '1835', body: { en: 'A powerful depiction of the ancient monument.', it: 'Una potente rappresentazione dell\'antico monumento.', fr: 'Une représentation puissante du monument ancien.' }, svg: createArt('#2a3a4a') },
+          { title: { en: 'The Hay Wain', it: 'Il Carro da Fieno', fr: 'La Charrette de foin', es: 'La carreta de heno', de: 'Der Heuwagen', zh: '干草车', ja: '乾草の車' }, date: '1821', body: { en: 'An iconic English landscape.', it: 'Un iconico paesaggio inglese.', fr: 'Un paysage anglais emblématique.' }, svg: createArt('#3a4a2a') },
+          { title: { en: 'The Cornfield', it: 'Il Campo di Grano', fr: 'Le Champ de blé', es: 'El campo de maíz', de: 'Das Kornfeld', zh: '麦田', ja: 'コーンフィールド' }, date: '1826', body: { en: 'A view near East Bergholt.', it: 'Una vista vicino a East Bergholt.', fr: 'Une vue près d\'East Bergholt.' }, svg: createArt('#4a4a2a') }
         ]
       },
       {
-        type: 'paintings',
-        artist: 'J.M.W. Turner',
+        type: 'paintings', artist: 'J.M.W Turner',
         works: [
-          {
-            title: 'The Shipwreck',
-            date: '1805',
-            body: 'Turner\'s first major seascape, depicting survivors struggling amid wreckage in a churning sea. The composition is raw and chaotic, painted with a bravura technique that emphasises the terrifying power of the ocean. Turner is said to have had himself lashed to a mast during a storm to experience the elements directly, a claim that speaks to his extraordinary artistic ambition.',
-            svg: svgShipwreck()
-          },
-          {
-            title: 'Rain, Steam and Speed – The Great Western Railway',
-            date: '1844',
-            body: 'One of the most celebrated paintings of the Industrial Revolution, depicting a locomotive crossing the Maidenhead Railway Bridge in driving rain. The locomotive — barely discernible within a golden blaze of light — becomes an emblem of modernity erupting through the natural world. A hare runs ahead of the train, the ancient creature outpaced by the age of steam.',
-            svg: svgRainSteam()
-          },
-          {
-            title: 'Snow Storm – Steam-Boat off a Harbour\'s Mouth',
-            date: '1842',
-            body: 'A vortex of wind, snow, and sea engulfs a steam-boat signalling for assistance. Turner claimed he had himself lashed to the mast of the Ariel for four hours to observe the storm. Critics were baffled; one called it "soapsuds and whitewash." Turner was furious, insisting he had not painted it to be understood but to show what such a scene was like.',
-            svg: svgSnowStorm()
-          }
+          { title: { en: 'The Shipwreck', it: 'Il Naufragio', fr: 'Le Naufrage', es: 'El naufragio', de: 'Der Schiffbruch', zh: '海难', ja: '難破船' }, date: '1805', body: { en: 'Mastery of maritime drama.', it: 'Maestria del dramma marittimo.', fr: 'Maîtrise du drame maritime.' }, svg: createArt('#1a1a1a') },
+          { title: { en: 'Rain, Steam and Speed', it: 'Pioggia, Vapore e Velocità', fr: 'Pluie, vapeur et vitesse', es: 'Lluvia, vapor y velocidad', de: 'Regen, Dampf und Geschwindigkeit', zh: '雨，蒸汽和速度', ja: '雨、蒸気、速度' }, date: '1844', body: { en: 'The Great Western Railway.', it: 'La Great Western Railway.', fr: 'Le chemin de fer.' }, svg: createArt('#4a3a1a') },
+          { title: { en: 'Snow Storm', it: 'Tempesta di Neve', fr: 'Tempête de neige', es: 'Tormenta de nieve', de: 'Schneesturm', zh: '暴风雪', ja: '雪嵐' }, date: '1842', body: { en: 'Steamboat off a Harbour\'s Mouth.', it: 'Battello a vapore all\'imboccatura di un porto.', fr: 'Bateau à vapeur.' }, svg: createArt('#2a2a2a') }
         ]
       },
       {
-        type: 'paintings',
-        artist: 'Caspar David Friedrich',
+        type: 'paintings', artist: 'Caspar David Friedrich',
         works: [
-          {
-            title: 'Wanderer above the Sea of Fog',
-            date: 'c. 1818',
-            body: 'The defining image of German Romanticism: a solitary figure stands on a rocky precipice, gazing out over a sea of cloud from which mountain peaks emerge like islands. The viewer is placed in the same position as the wanderer — confronting the sublime immensity of nature. Friedrich transforms landscape into a meditation on existence, solitude, and the human relationship to the infinite.',
-            svg: svgWanderer()
-          },
-          {
-            title: 'The Abbey in the Oakwood',
-            date: '1810',
-            body: 'A procession of monks bearing a coffin through the ruins of a Gothic abbey, surrounded by leafless oak trees in a winter twilight. The crescent moon rises over broken arches. Friedrich uses the ruin — of the church, of nature in winter — to evoke the passage of time and the certainty of death, inviting contemplation of mortality and spiritual renewal.',
-            svg: svgAbbey()
-          }
+          { title: { en: 'Wanderer above the Sea of Fog', it: 'Viandante sul Mare di Nebbia', fr: 'Le Voyageur contemplant une mer de nuages', es: 'El caminante sobre el mar de nubes', de: 'Der Wanderer über dem Nebelmeer', zh: '雾海上的漫游者', ja: '雲海の上の旅人' }, date: '1818', body: { en: 'The pinnacle of Romanticism.', it: 'Il culmine del Romanticismo.', fr: 'Romantisme.' }, svg: createArt('#3a4a5a') },
+          { title: { en: 'The Abbey in the Oakwood', it: 'L\'Abbazia nel Querceto', fr: 'L\'Abbaye dans une forêt de chênes', es: 'Abadía en el robledal', de: 'Abtei im Eichwald', zh: '橡树林中的修道院', ja: 'オークの森の修道院' }, date: '1809', body: { en: 'A haunting cemetery scene.', it: 'Una inquietante scena di cimitero.', fr: 'Scène de cimetière.' }, svg: createArt('#1a1a0a') }
         ]
       },
-      {
-        type: 'audio',
-        label: 'Poetry Reading',
-        title: 'I Wandered Lonely as a Cloud',
-        author: 'William Wordsworth, 1807',
-        excerpt: 'I wandered lonely as a cloud\nThat floats on high o\'er vales and hills,\nWhen all at once I saw a crowd,\nA host, of golden daffodils;\nBeside the lake, beneath the trees,\nFluttering and dancing in the breeze.',
-        audioText: 'I wandered lonely as a cloud, that floats on high o\'er vales and hills. When all at once I saw a crowd, a host, of golden daffodils. Beside the lake, beneath the trees, fluttering and dancing in the breeze.'
-      },
-      {
-        type: 'audio',
-        label: 'Poetry Reading',
-        title: 'The Tyger',
-        author: 'William Blake, 1794',
-        excerpt: 'Tyger Tyger, burning bright,\nIn the forests of the night;\nWhat immortal hand or eye,\nCould frame thy fearful symmetry?',
-        audioText: 'Tyger Tyger, burning bright, in the forests of the night. What immortal hand or eye, could frame thy fearful symmetry?'
-      }
+      { type: 'audio', title: { en: 'I Wandered Lonely as a Cloud', it: 'Vagavo Solitario come una Nuvola', fr: 'Je vagabondais seul comme un nuage' }, author: 'Wordsworth', audioText: { en: 'I wandered lonely as a cloud that floats on high o\'er vales and hills.', it: 'Vagavo solitario come una nuvola che fluttua in alto sopra valli e colline.' }, excerpt: { en: 'I wandered lonely...', it: 'Vagavo solitario...' } },
+      { type: 'audio', title: { en: 'The Tyger', it: 'The Tyger (La Tigre)', fr: 'Le Tigre' }, author: 'Blake', audioText: { en: 'Tyger Tyger, burning bright, In the forests of the night.', it: 'Tigre! Tigre! Divampante splendore, Nelle foreste della notte.' }, excerpt: { en: 'Tyger Tyger...', it: 'Tigre! Tigre!...' } }
     ]
   },
   {
     id: 'beauty-room',
-    name: 'Beauty Room',
-    artists: 'Monet · Morisot',
+    name: { en: 'Beauty Room', fr: 'Chambre de Beauté', es: 'Sala de Belleza', de: 'Schönheitszimmer', it: 'Sala della Bellezza', zh: '美展厅', ja: 'ビューティー・ルーム' },
     previewColor: '#3a2a1a',
     sections: [
       {
-        type: 'paintings',
-        artist: 'Claude Monet',
+        type: 'paintings', artist: 'Claude Monet',
         works: [
-          {
-            title: 'Impression, Sunrise',
-            date: '1872',
-            body: 'The painting that gave Impressionism its name — though the critic who coined the term intended it as a jeer. Monet depicts the harbour of Le Havre at dawn, the orange sun reflected in the blue-grey water, industrial cranes rising through the mist. It captures not a scene but a sensation: the shimmer of early morning light on moving water, the world half-formed in the haze of waking.',
-            svg: svgImpressionSunrise()
-          },
-          {
-            title: 'Cliff Walk at Pourville',
-            date: '1882',
-            body: 'Two women stand at the cliff\'s edge at Pourville on the Normandy coast, their parasols bent by the sea wind. Monet captures the dazzle of bright summer light — the deep blue of the Channel, the green grass, the pale chalk cliffs. The brushwork is loose and spontaneous, registering the movement of wind through grass and the women\'s dresses with extraordinary vitality.',
-            svg: svgCliffWalk()
-          }
+          { title: { en: 'Impression, Sunrise', it: 'Impressione, Levar del Sole', fr: 'Impression, soleil levant', es: 'Impresión, sol naciente', de: 'Impression, Sonnenaufgang', zh: '日出·印象', ja: '印象・日の出' }, date: '1872', body: { en: 'The dawn of a new movement.', it: 'L\'alba di un nuovo movimento.', fr: 'Nouveau mouvement.' }, svg: createArt('#4a5a6a') },
+          { title: { en: 'Cliff Walk at Pourville', it: 'Passeggiata sulla Scogliera a Pourville', fr: 'Promenade sur la falaise à Pourville', es: 'Paseo por el acantilado en Pourville', de: 'Klippenwanderung bei Pourville', zh: '普尔维尔断崖散步', ja: 'プルヴィルの断崖の散歩' }, date: '1882', body: { en: 'Luminous coastal light.', it: 'Luce costiera luminosa.', fr: 'Lumière côtière.' }, svg: createArt('#5a6a7a') }
         ]
       },
       {
-        type: 'paintings',
-        artist: 'Berthe Morisot',
+        type: 'paintings', artist: 'Berthe Morisot',
         works: [
-          {
-            title: 'Summer\'s Day',
-            date: '1879',
-            body: 'Two fashionably dressed women sit in a rowing boat on the Bois de Boulogne lake in Paris. Morisot captures the shimmer of sunlight on water and the women\'s leisure with her characteristically fluid, almost sketchy brushwork. She was among the most radical of the Impressionists in technique — her paint surface evokes sensation rather than describing it, the figures dissolving into light.',
-            svg: svgSummersDay()
-          },
-          {
-            title: 'Hanging the Laundry out to Dry',
-            date: '1875',
-            body: 'A scene of everyday domestic life transformed by Morisot\'s luminous technique: laundry hangs in a sun-filled garden, a figure moving among the sheets. The painting is a meditation on the rhythms of women\'s work, rendered with a lightness of touch that makes the mundane radiant. Morisot\'s ability to find beauty in the domestic sphere was both personal and political.',
-            svg: svgLaundry()
-          }
+          { title: { en: 'Summer\'s Day', it: 'Giorno d\'Estate', fr: 'Jour d\'été', es: 'Día de verano', de: 'Sommertag', zh: '夏日', ja: '夏の日' }, date: '1879', body: { en: 'Two women in a boat.', it: 'Due donne in barca.', fr: 'Sur le bateau.' }, svg: createArt('#6a7a5a') },
+          { title: { en: 'Hanging the Laundry', it: 'Il Bucato Steso', fr: 'Le Linge qui sèche', es: 'Colgando la colada', de: 'Wäsche aufhängen', zh: '晒衣服', ja: '洗濯物を干す' }, date: '1875', body: { en: 'Capturing domestic life.', it: 'Catturando la vita domestica.', fr: 'Vie domestique.' }, svg: createArt('#7a7a7a') }
         ]
       }
     ]
   },
   {
     id: 'little-dining-room',
-    name: 'Little Dining Room',
-    artists: 'Van Gogh · Mondrian',
-    previewColor: '#1a1a2a',
+    name: { en: 'Little Dining Room', fr: 'Petite Salle à Manger', es: 'Comedor Pequeño', de: 'Kleiner Speisesaal', it: 'Piccola Sala da Pranzo', zh: '小餐厅', ja: '小ダイニングルーム' },
+    previewColor: '#2a1a2a',
     sections: [
       {
-        type: 'paintings',
-        artist: 'Vincent van Gogh',
+        type: 'paintings', artist: 'Vincent van Gogh',
         works: [
-          {
-            title: 'The Starry Night',
-            date: '1889',
-            body: 'Painted from the window of his room at the Saint-Paul-de-Mausole asylum in Saint-Rémy-de-Provence, The Starry Night transforms the night sky into a swirling cosmos of energy. Eleven stars, a crescent moon, and a luminous Venus arc over the sleeping village, with a great cypress rising like a flame in the foreground. Van Gogh described it in a letter: "I see infinity in nature."',
-            svg: svgStarryNight()
-          },
-          {
-            title: 'Landscape with Wheat Sheaves',
-            date: '1885',
-            body: 'Painted during Van Gogh\'s early Dutch period in Nuenen, this sombre landscape depicts peasant life in the fields at harvest time. The palette is still dark — the muted browns and greens of the Dutch countryside — but the emotional intensity already present: Van Gogh seeks not to depict the scene but to express the weight of labour, the texture of the earth, the life embedded in the land.',
-            svg: svgWheatSheaves()
-          }
+          { title: { en: 'Starry Night', it: 'Notte Stellata', fr: 'La Nuit étoilée', es: 'La noche estrellada', de: 'Sternennacht', zh: '星夜', ja: '星月夜' }, date: '1889', body: { en: 'The view from Saint-Rémy-de-Provence.', it: 'La vista da Saint-Rémy-de-Provence.', fr: 'Ciel de Saint-Rémy.' }, svg: createArt('#1a1a3a') },
+          { title: { en: 'Landscape with Wheat Sheaves', it: 'Paesaggio con Covoni di Grano', fr: 'Paysage avec meules de blé', es: 'Paisaje con gavillas de trigo', de: 'Landschaft mit Weizengarben', zh: '麦捆景观', ja: '麦わらのある風景' }, date: '1889', body: { en: 'Golden harvest textures.', it: 'Trame del raccolto dorato.', fr: 'Moisson dorée.' }, svg: createArt('#6a5a2a') }
         ]
       },
       {
-        type: 'paintings',
-        artist: 'Piet Mondrian',
+        type: 'paintings', artist: 'Piet Mondrian',
         works: [
-          {
-            title: 'Row of Eleven Poplars in Red, Yellow, Blue and Green',
-            date: '1908',
-            body: 'Painted before Mondrian arrived at the pure abstraction for which he is famous, this early work shows his roots in Post-Impressionism. A row of poplars along a Dutch canal is rendered in vivid, non-naturalistic colour — reds and yellows applied with bold, expressive strokes. The trees are already becoming something more than trees: vertical rhythms, a composition moving toward the abstract.',
-            svg: svgPoplars()
-          },
-          {
-            title: 'Wood Near Oele (Wood with Beech Trees)',
-            date: '1908',
-            body: 'A dense arrangement of tree trunks in a Dutch forest, their surfaces animated with patches of vivid colour. Mondrian was profoundly influenced by Pointillism at this period, but he applies colour with a freedom that pushes beyond description. The canvas vibrates with energy. Looking closely, the forest begins to dissolve — you begin to see not trees but a grid of forms, a world on the edge of abstraction.',
-            svg: svgBeechTrees()
-          }
+          { title: { en: 'Row of Eleven Poplars', it: 'Fila di Undici Pioppi', fr: 'Rangée de onze peupliers', es: 'Fila de once álamos', de: 'Reihe von elf Pappeln', zh: '十一棵杨树', ja: '11本のポプラ' }, date: '1908', body: { en: 'Early experiment with color.', it: 'Primo esperimento con il colore.', fr: 'Couleurs précoces.' }, svg: createArt('#1a4a1a') },
+          { title: { en: 'Wood with Beech Trees', it: 'Bosco con Faggi', fr: 'Bois de hêtres', es: 'Bosque de hayas', de: 'Buchenwald', zh: '山毛榉树林', ja: 'ブナの木の森' }, date: '1888', body: { en: 'An early naturalistic study.', it: 'Uno dei primi studi naturalistici.', fr: 'Étude naturaliste.' }, svg: createArt('#2a3a1a') }
         ]
       }
     ]
   },
   {
     id: 'red-room',
-    name: 'Red Room',
-    artists: 'Christo & Jeanne-Claude · Gerhard Richter',
-    previewColor: '#2a0a0a',
+    name: { en: 'Red Room', fr: 'Salon Rouge', es: 'Sala Roja', de: 'Roter Salon', it: 'Sala Rossa', zh: '红展厅', ja: 'レッド・ルーム' },
+    previewColor: '#4a0a0a',
     sections: [
       {
-        type: 'paintings',
-        artist: 'Christo and Jeanne-Claude',
+        type: 'paintings', artist: 'Christo and Jean-Claude',
         works: [
-          {
-            title: 'Wrapped Trees',
-            date: '1998, Riehen',
-            body: 'For two weeks in autumn 1998, 178 trees in the Berower Park and Fondation Beyeler in Riehen, Switzerland, were wrapped in 55,000 square metres of woven polyester fabric. The project transformed familiar trees into strange, luminous presences — the fabric catching the light, rustling in the wind, revealing and concealing at once. Christo insisted the works were not symbolic: "I don\'t need to add anything, the work is already there."',
-            svg: svgWrappedTrees()
-          },
-          {
-            title: 'The Umbrellas',
-            date: '1991, Japan and California',
-            body: 'Over eighteen days in October 1991, 3,100 umbrellas were simultaneously opened across two landscapes: 1,340 blue ones in a river valley in Ibaraki, Japan, and 1,760 yellow ones along a highway in Tejon, California. The umbrellas transformed rural landscapes into environments of intense colour. The project employed over 2,000 workers and cost $26 million, funded entirely by the artists through the sale of original preparatory works.',
-            svg: svgUmbrellas()
-          }
+          { title: { en: 'Wrapped Trees', it: 'Alberi Impacchettati', fr: 'Arbres emballés', es: 'Árboles envueltos', de: 'Verhüllte Bäume', zh: '被包裹的树', ja: '包まれた木々' }, date: '1998', body: { en: 'A transformation of the landscape.', it: 'Una trasformazione del paesaggio.', fr: 'Art paysager.' }, svg: createArt('#5a2a2a') },
+          { title: { en: 'Umbrellas', it: 'Ombrelli (The Umbrellas)', fr: 'Les Parapluies', es: 'Sombrillas', de: 'Die Schirme', zh: '伞', ja: 'アンブレラ' }, date: '1991', body: { en: 'Joint project in USA and Japan.', it: 'Progetto congiunto in USA e Giappone.', fr: 'Projet conjoint.' }, svg: createArt('#6a3a3a') }
         ]
       },
       {
-        type: 'paintings',
-        artist: 'Gerhard Richter',
+        type: 'paintings', artist: 'Gerhard Richter',
         works: [
-          {
-            title: 'Seascape (Cloudy)',
-            date: '1969',
-            body: 'From Richter\'s celebrated Seascape series, this large-format painting depicts the sea and sky with a photographic realism that is slightly, deliberately blurred — as though seen through misty glass. Richter painted from found photographs, introducing a subtle defocusing that undermines the image\'s claim to truth. The sea becomes not a place but a question about representation and reality.',
-            svg: svgSeascape1()
-          },
-          {
-            title: 'Seascape (Sea-Sea)',
-            date: '1970',
-            body: 'A second work from the Seascape series, depicting the horizon between sea and sky with almost minimal restraint. Two horizontal bands — grey-blue sea, grey-white sky — occupy the canvas in equal proportion. The blurring of the photographic source creates an atmosphere of stillness and uncertainty. Richter has said the sea is among the oldest and most reliable of motifs, and one of the most honest.',
-            svg: svgSeascape2()
-          }
+          { title: { en: 'Seascape Series', it: 'Serie di Marine', fr: 'Série de Marines', es: 'Serie de paisajes marinos', de: 'Seestücke', zh: '海景系列', ja: 'シースケープ' }, date: '1998', body: { en: 'Photorealistic ocean studies.', it: 'Studi oceanici fotorealistici.', fr: 'Études de l\'océan.' }, svg: createArt('#1a3a4a') }
         ]
       }
     ]
   },
   {
     id: 'north-gallery',
-    name: 'North Gallery',
-    artists: 'Andreas Gursky · Olafur Eliasson',
-    previewColor: '#0a1a2a',
+    name: { en: 'North Gallery', fr: 'Galerie Nord', es: 'Galería Norte', de: 'Nordgalerie', it: 'Galleria Nord', zh: '北画廊', ja: '北のギャラリー' },
+    previewColor: '#0a2a2a',
     sections: [
       {
-        type: 'paintings',
-        artist: 'Andreas Gursky',
+        type: 'paintings', artist: 'Andreas Gursky',
         works: [
-          {
-            title: 'Aletsch Glacier I',
-            date: '1993',
-            body: 'The Aletsch Glacier — the longest glacier in the Alps — fills the vast format of Gursky\'s large-scale photograph. Shot from a high vantage point, the glacier\'s white surface is marked by dark lateral moraines that run parallel lines into the distance. Gursky often digitally composites his images, but the overwhelming sense is of a world of geological time, indifferent to human presence.',
-            svg: svgGlacier1()
-          },
-          {
-            title: 'Aletsch Glacier II',
-            date: '1994',
-            body: 'A second encounter with the Aletsch, from a different angle. Here the glacier is surrounded by alpine meadow, the ice-world seen in context of the living landscape that borders it. Gursky\'s photographs work cumulatively: seen together, the two Aletsch works map not just a glacier but the human eye\'s attempt to comprehend a scale beyond ordinary experience — a world of stone and ice and time.',
-            svg: svgGlacier2()
-          }
+          { title: { en: 'Aletsch Glacier 1', it: 'Ghiacciaio dell\'Aletsch 1', fr: 'Glacier d\'Aletsch 1', es: 'Glaciar Aletsch 1', de: 'Aletschgletscher 1', zh: '阿莱奇冰川 1', ja: 'アレッチ氷河 1' }, date: '1993', body: { en: 'Stark mountain photography.', it: 'Cruda fotografia di montagna.', fr: 'Échelle massive.' }, svg: createArt('#7a7a8a') },
+          { title: { en: 'Aletsch Glacier 2', it: 'Ghiacciaio dell\'Aletsch 2', fr: 'Glacier d\'Aletsch 2', es: 'Glaciar Aletsch 2', de: 'Aletschgletscher 2', zh: '阿莱奇冰川 2', ja: 'アレッチ氷河 2' }, date: '1993', body: { en: 'Massive scale and detail.', it: 'Scala e dettaglio massicci.', fr: 'Détail glaciaire.' }, svg: createArt('#8a8a9a') }
         ]
       },
       {
-        type: 'paintings',
-        artist: 'Olafur Eliasson',
+        type: 'paintings', artist: 'Olafur Eliasson',
         works: [
-          {
-            title: 'The Weather Project',
-            date: '2003, Tate Modern',
-            body: 'For six months in 2003, Eliasson filled the Turbine Hall of Tate Modern with a vast artificial sun: a semicircle of mono-frequency lamps reflected in a mirrored ceiling to create the illusion of a complete sphere, bathing the space in orange light. Two million visitors came; many lay on the floor for hours, looking at their reflected selves, transfixed. The work asked: what is natural light? What is weather? What is a sun?',
-            svg: svgWeatherProject()
-          },
-          {
-            title: 'Ice Watch',
-            date: '2014–ongoing',
-            body: 'Eliasson and geologist Minik Rosing harvest blocks of glacial ice from Greenlandic fjords and arrange them in public squares around the world — Paris, London, Copenhagen, New York — where they slowly melt. Visitors can touch the ice, watch it diminish, listen to it crack and drip. The ice is thousands of years old. The work makes climate change visceral, immediate, personal: you are watching ancient ice die in real time.',
-            svg: svgIceWatch()
-          }
+          { title: { en: 'The Weather Project', it: 'The Weather Project', fr: 'Le Projet Météo', es: 'El proyecto del clima', de: 'Das Wetterprojekt', zh: '天气项目', ja: 'ウェザー・プロジェクト' }, date: '2003', body: { en: 'Artificial sun in the Turbine Hall.', it: 'Sole artificiale nella Turbine Hall.', fr: 'Soleil artificiel.' }, svg: createArt('#e8c96a') },
+          { title: { en: 'Ice Watch', it: 'Ice Watch', fr: 'Montre de Glace', es: 'Reloj de hielo', de: 'Eisuhr', zh: '冰表', ja: 'アイス・ウォッチ' }, date: '2014', body: { en: 'Melting glacial ice blocks.', it: 'Blocchi di ghiaccio glaciale che si sciolgono.', fr: 'Glace fondante.' }, svg: createArt('#c0e0f0') }
         ]
       }
     ]
   },
   {
     id: 'pleasure-garden',
-    name: 'The Pleasure Garden',
-    artists: 'Claude Monet',
-    previewColor: '#0a1a0a',
+    name: { en: 'Pleasure Garden', fr: 'Jardin d\'Agrément', es: 'Jardín de recreo', de: 'Lustgarten', it: 'Giardino di Piacere', zh: '游乐园', ja: 'プレジャー・ガーデン' },
+    previewColor: '#1a3a1a',
     sections: [
       {
-        type: 'paintings',
-        artist: 'Claude Monet',
+        type: 'paintings', artist: 'Claude Monet',
         works: [
-          {
-            title: 'The Artist\'s Garden at Giverny',
-            date: '1900',
-            body: 'Monet designed and planted the garden at Giverny himself, and it became the central subject of his late career. This painting captures the famous central alley — the Grande Allée — in summer bloom, a tunnel of colour arching toward the house. Monet painted his garden obsessively, in all weathers and all seasons, understanding it as a living, ever-changing artwork in itself.',
-            svg: svgGardenGiverny()
-          },
-          {
-            title: 'Pathway in Monet\'s Garden',
-            date: '1902',
-            body: 'A view down one of the garden paths at Giverny, bordered by irises and other flowering plants. The path itself barely exists beneath the profusion of colour — pinks, whites, mauves — that Monet cultivates with as much care as he applies paint to canvas. The garden and the paintings are inseparable: each is a version of the other.',
-            svg: svgPathway()
-          },
-          {
-            title: 'Water Lily Pond',
-            date: '1899',
-            body: 'The Japanese footbridge arches over the water lily pond at Giverny in this early version of a subject Monet would return to hundreds of times. The pond was Monet\'s own creation: he diverted a stream, obtained permission from local authorities, and planted the water lilies himself. The bridge and its reflection, the floating lilies, the weeping willows — these elements become a world unto themselves, a garden of contemplation.',
-            svg: svgWaterLily()
-          }
-        ]
-      }
-    ]
-  },
-  {
-    id: 'gay-room',
-    name: 'The Gay Room',
-    artists: 'Harvey · Tyson · Ruber',
-    previewColor: '#1a0a1a',
-    sections: [
-      {
-        type: 'paintings',
-        artist: 'Various Artists (The Original Collection)',
-        works: [
-          {
-            title: 'Portrait of Porter',
-            date: 'c. 1601',
-            body: 'Max Harvey, the famously bad artist, once lived in this house. He had a small penis.',
-            svg: svgPorter()
-          },
-          {
-            title: 'The Deer Park is Gay',
-            date: 'c. 1690',
-            body: 'Joe Tyson says he loves Freya Shearn. He is correct.',
-            svg: svgDeerPark()
-          },
-          {
-            title: 'Lady Oscar',
-            date: 'c. 1619, later copy',
-            body: 'Oscar Ruber was one of the most remarkable women of the period. She loves herself.',
-            svg: svgLadyOscar()
-          },
-          {
-            title: 'The Gay One',
-            date: 'c. 1650–60',
-            body: 'This shows Oscar\'s bum hole opened to its fullest. This self portrait was done with a mirror.',
-            svg: svgGayOne()
-          },
-          {
-            title: 'Circle of Cloud in Bum',
-            date: 'c. 1670–80',
-            body: 'Only losers read information about paintings. If you read this, you\'re gay.',
-            svg: svgCloudBum()
-          },
-          {
-            title: 'The Cartoon: Allegory of Penis and Vagina',
-            date: 'Early 18th century copy',
-            body: 'God knows what we do. He is watching.',
-            svg: svgAllegory()
-          }
+          { title: { en: 'The Artist\'s Garden at Giverny', it: 'Il Giardino dell\'Artista a Giverny', fr: 'Le Jardin de l\'artiste à Giverny', es: 'El jardín del artista en Giverny', de: 'Der Garten des Künstlers in Giverny', zh: '吉维尼的小花园', ja: 'ジヴェルニーの庭' }, date: '1900', body: { en: 'Floral explosion of purple.', it: 'Esplosione floreale di viola.', fr: 'Explosion florale.' }, svg: createArt('#4a2a4a') },
+          { title: { en: 'Pathway in Monet\'s Garden', it: 'Sentiero nel Giardino di Monet', fr: 'Allée du jardin de Monet', es: 'Sendero en el jardín de Monet', de: 'Weg im Garten von Monet', zh: '莫奈花园的小道', ja: 'モネの庭の小道' }, date: '1902', body: { en: 'Dappled light on a garden path.', it: 'Luce screziata su un sentiero di giardino.', fr: 'Lumière tachetée.' }, svg: createArt('#3a5a3a') },
+          { title: { en: 'Water Lily Pond', it: 'Lo Stagno delle Ninfee', fr: 'Le Bassin aux nymphéas', es: 'El estanque de los lirios', de: 'Der Seerosenteich', zh: '睡莲池', ja: '睡蓮の池' }, date: '1899', body: { en: 'The famous Japanese bridge.', it: 'Il famoso ponte giapponese.', fr: 'Pont japonais.' }, svg: createArt('#2a6a4a') }
         ]
       }
     ]
   }
 ];
 
-/* ══════════════════════════════════════════════
-   SVG PAINTING GENERATORS
-══════════════════════════════════════════════ */
+function t(key) { return i18n[currentLang][key] || i18n['en'][key]; }
+function getTxt(obj) { return typeof obj === 'object' ? (obj[currentLang] || obj['en']) : obj; }
 
-function svgBase(id, content, bg='#2a1a0a') {
-  return `<svg class="css-painting" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-  <defs><radialGradient id="${id}" cx="50%" cy="50%" r="70%"><stop offset="0%" stop-color="${bg}"/><stop offset="100%" stop-color="#0d0805"/></radialGradient></defs>
-  <rect width="400" height="300" fill="url(#${id})"/>
-  ${content}
-  </svg>`;
+function applyTranslations() {
+  document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.getAttribute('data-i18n')); });
+  const ls = document.getElementById('lang-selectors');
+  const langs = ['en', 'fr', 'de', 'es', 'it', 'zh', 'ja'];
+  ls.innerHTML = langs.map(l => `<button class="lang-btn ${l===currentLang?'active':''}" onclick="setLang('${l}')">${l.toUpperCase()}</button>`).join('');
 }
 
-function svgStonehenge() {
-  return `<svg class="css-painting" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-  <defs><linearGradient id="stonesky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1a2a3a"/><stop offset="50%" stop-color="#4a5a6a"/><stop offset="100%" stop-color="#6a7050"/></linearGradient></defs>
-  <rect width="400" height="300" fill="url(#stonesky)"/>
-  <rect x="0" y="210" width="400" height="90" fill="#3a3020" opacity="0.9"/>
-  <ellipse cx="120" cy="90" rx="50" ry="20" fill="#f5f0e8" opacity="0.5"/>
-  <ellipse cx="280" cy="80" rx="40" ry="18" fill="#f5f0e8" opacity="0.4"/>
-  <path d="M80 100 Q120 70 160 100" stroke="#c9a84c" stroke-width="2" fill="none" opacity="0.5"/>
-  <rect x="160" y="180" width="18" height="45" fill="#786858" opacity="0.95"/>
-  <rect x="190" y="175" width="18" height="50" fill="#8a7868" opacity="0.9"/>
-  <rect x="220" y="180" width="18" height="45" fill="#786858" opacity="0.95"/>
-  <rect x="155" y="172" width="90" height="12" fill="#9a8878" opacity="0.9"/>
-  <rect x="248" y="185" width="18" height="40" fill="#706050" opacity="0.85"/>
-  <rect x="280" y="178" width="18" height="48" fill="#8a7868" opacity="0.9"/>
-  <rect x="244" y="175" width="60" height="12" fill="#9a8878" opacity="0.85"/>
-  <rect x="135" y="185" width="16" height="38" fill="#685848" opacity="0.8"/>
-  </svg>`;
+function setLang(lang) {
+  currentLang = lang;
+  applyTranslations();
+  if (currentRoomId) enterRoom(currentRoomId); else renderLobby();
 }
-
-function svgHayWain() {
-  return `<svg class="css-painting" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-  <defs><linearGradient id="hwsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#6a8aaa"/><stop offset="60%" stop-color="#aabbc8"/><stop offset="100%" stop-color="#c8d0a0"/></linearGradient><linearGradient id="hwland" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#5a7a3a"/><stop offset="100%" stop-color="#3a5220"/></linearGradient></defs>
-  <rect width="400" height="300" fill="url(#hwsky)"/>
-  <ellipse cx="150" cy="70" rx="70" ry="28" fill="white" opacity="0.8"/>
-  <ellipse cx="300" cy="55" rx="55" ry="22" fill="white" opacity="0.65"/>
-  <rect x="0" y="175" width="400" height="125" fill="url(#hwland)"/>
-  <rect x="0" y="175" width="160" height="50" fill="#4a6a8a" opacity="0.4"/>
-  <rect x="0" y="175" width="180" height="55" fill="#5a7a9a" opacity="0.3"/>
-  <ellipse cx="30" cy="155" rx="30" ry="60" fill="#1a2a10" opacity="0.95"/>
-  <ellipse cx="50" cy="145" rx="25" ry="50" fill="#1a2a10" opacity="0.9"/>
-  <rect x="25" y="205" width="12" height="50" fill="#0a1808" opacity="0.9"/>
-  <rect x="110" y="150" width="60" height="40" fill="#c8b880" opacity="0.85"/>
-  <ellipse cx="140" cy="148" rx="35" ry="20" fill="#b8a870" opacity="0.9"/>
-  <rect x="120" y="185" width="20" height="8" rx="4" fill="#6a4a28" opacity="0.8"/>
-  <rect x="145" y="187" width="20" height="7" rx="3.5" fill="#5a3a18" opacity="0.8"/>
-  <ellipse cx="340" cy="170" rx="50" ry="25" fill="#5a7a3a" opacity="0.7"/>
-  </svg>`;
-}
-
-function svgCornfield() {
-  return `<svg class="css-painting" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-  <defs><linearGradient id="cfsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#7a9aaa"/><stop offset="100%" stop-color="#b8c8a0"/></linearGradient></defs>
-  <rect width="400" height="300" fill="url(#cfsky)"/>
-  <rect x="0" y="170" width="400" height="130" fill="#c8a840" opacity="0.8"/>
-  <rect x="0" y="170" width="150" height="130" fill="#3a5020" opacity="0.6"/>
-  <ellipse cx="40" cy="120" rx="35" ry="80" fill="#1a2a10" opacity="0.95"/>
-  <ellipse cx="70" cy="110" rx="28" ry="70" fill="#1a2a10" opacity="0.9"/>
-  <rect x="35" y="210" width="10" height="50" fill="#0d1808" opacity="0.9"/>
-  <rect x="200" y="160" width="200" height="140" fill="#d4b040" opacity="0.85"/>
-  <path d="M0 200 Q100 195 200 200 Q300 205 400 198" stroke="#2a4010" stroke-width="15" fill="none" opacity="0.3"/>
-  <rect x="110" y="200" width="8" height="50" fill="#8a6a30" opacity="0.5"/>
-  <ellipse cx="70" cy="185" rx="15" ry="10" fill="#3a5020" opacity="0.7"/>
-  </svg>`;
-}
-
-function svgShipwreck() {
-  return `<svg class="css-painting" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-  <defs><linearGradient id="swsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1a1a2a"/><stop offset="100%" stop-color="#3a3030"/></linearGradient></defs>
-  <rect width="400" height="300" fill="url(#swsky)"/>
-  <path d="M0 200 Q50 170 100 210 Q150 240 200 190 Q250 150 300 210 Q350 255 400 200 L400 300 L0 300 Z" fill="#1a2a3a" opacity="0.9"/>
-  <path d="M0 210 Q50 185 100 220 Q150 248 200 200 Q250 165 300 218" stroke="#4a6a8a" stroke-width="3" fill="none" opacity="0.8"/>
-  <path d="M80 190 L60 140 L100 155 Z" fill="#5a4020" opacity="0.7"/>
-  <path d="M100 190 L120 130" stroke="#5a4020" stroke-width="4" opacity="0.8"/>
-  <ellipse cx="200" cy="220" rx="30" ry="10" fill="#c8b080" opacity="0.5"/>
-  <path d="M120 240 Q180 220 240 240" stroke="#c8b080" stroke-width="2" fill="none" opacity="0.5"/>
-  </svg>`;
-}
-
-function svgRainSteam() {
-  return `<svg class="css-painting" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-  <defs><radialGradient id="rscent" cx="40%" cy="50%" r="60%"><stop offset="0%" stop-color="#e8c040" stop-opacity="0.8"/><stop offset="60%" stop-color="#8a7040" stop-opacity="0.5"/><stop offset="100%" stop-color="#3a2a10" stop-opacity="0.9"/></radialGradient></defs>
-  <rect width="400" height="300" fill="#2a2010"/>
-  <rect width="400" height="300" fill="url(#rscent)"/>
-  <path d="M0 200 Q200 195 400 200" stroke="#3a3020" stroke-width="40" fill="none" opacity="0.8"/>
-  <rect x="150" y="150" width="80" height="40" rx="5" fill="#1a1010" opacity="0.95"/>
-  <ellipse cx="190" cy="148" rx="25" ry="20" fill="#2a2010" opacity="0.9"/>
-  <circle cx="165" cy="195" r="12" fill="#1a1010" opacity="0.9"/>
-  <circle cx="215" cy="195" r="12" fill="#1a1010" opacity="0.9"/>
-  <ellipse cx="180" cy="100" rx="40" ry="60" fill="#d0d0c0" opacity="0.25"/>
-  <ellipse cx="150" cy="80" rx="30" ry="40" fill="#e0e0d0" opacity="0.2"/>
-  </svg>`;
-}
-
-function svgSnowStorm() {
-  return `<svg class="css-painting" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-  <defs><radialGradient id="sscent" cx="50%" cy="50%" r="55%"><stop offset="0%" stop-color="#d0d0c8" stop-opacity="0.6"/><stop offset="100%" stop-color="#1a1a1a" stop-opacity="0.95"/></radialGradient></defs>
-  <rect width="400" height="300" fill="#1a1a1a"/>
-  <rect width="400" height="300" fill="url(#sscent)"/>
-  <path d="M200 150 Q100 100 50 200 Q100 250 200 200 Q300 250 350 180 Q300 80 200 150" stroke="#d0cfc0" stroke-width="4" fill="none" opacity="0.4"/>
-  <path d="M180 140 Q80 90 30 200 Q80 260 180 210 Q280 260 340 190 Q290 70 180 140" stroke="#c0bfb0" stroke-width="3" fill="none" opacity="0.3"/>
-  <ellipse cx="190" cy="195" rx="50" ry="15" fill="#3a3a2a" opacity="0.6"/>
-  <rect x="175" y="155" width="30" height="40" rx="5" fill="#2a2a1a" opacity="0.8"/>
-  </svg>`;
-}
-
-function svgWanderer() {
-  return `<svg class="css-painting" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-  <defs><linearGradient id="wandsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1a2030"/><stop offset="50%" stop-color="#6a7080"/><stop offset="100%" stop-color="#c0c8c0"/></linearGradient></defs>
-  <rect width="400" height="300" fill="url(#wandsky)"/>
-  <ellipse cx="100" cy="160" rx="80" ry="40" fill="#d0d8d0" opacity="0.6"/>
-  <ellipse cx="300" cy="170" rx="70" ry="35" fill="#c8d0c8" opacity="0.5"/>
-  <ellipse cx="200" cy="155" rx="100" ry="45" fill="#d8e0d8" opacity="0.4"/>
-  <path d="M120 240 Q160 180 200 120 Q230 165 270 240" fill="#2a2010" opacity="0.9"/>
-  <rect x="185" y="100" width="30" height="120" fill="#3a3020" opacity="0.8"/>
-  <ellipse cx="200" cy="98" rx="12" ry="12" fill="#c8a880" opacity="0.9"/>
-  <rect x="195" y="110" width="10" height="30" fill="#1a1010" opacity="0.9"/>
-  <line x1="200" y1="130" x2="215" y2="160" stroke="#6a4a28" stroke-width="2" opacity="0.8"/>
-  </svg>`;
-}
-
-function svgAbbey() {
-  return `<svg class="css-painting" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-  <defs><linearGradient id="abbeysky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0d0a08"/><stop offset="70%" stop-color="#2a2015"/><stop offset="100%" stop-color="#3a3020"/></linearGradient></defs>
-  <rect width="400" height="300" fill="url(#abbeysky)"/>
-  <circle cx="300" cy="60" r="12" fill="#f5f0d0" opacity="0.7"/>
-  <path d="M100 250 L100 160 L130 130 L160 160 L160 250" fill="#2a2010" opacity="0.7"/>
-  <path d="M130 130 L130 100" stroke="#3a3010" stroke-width="8" opacity="0.8"/>
-  <rect x="100" y="150" width="60" height="10" fill="#3a3020" opacity="0.6"/>
-  <path d="M200 250 L220 200 L225 140 L230 200 L250 250" fill="#2a2010" opacity="0.6"/>
-  <rect x="215" y="185" width="25" height="8" rx="4" fill="#1a1008" opacity="0.8"/>
-  <ellipse cx="50" cy="200" rx="25" ry="55" fill="#0a0f08" opacity="0.95"/>
-  <ellipse cx="350" cy="195" rx="22" ry="50" fill="#0a0f08" opacity="0.9"/>
-  <ellipse cx="170" cy="210" rx="18" ry="45" fill="#0a0f08" opacity="0.85"/>
-  <rect x="0" y="240" width="400" height="60" fill="#1a1508" opacity="0.9"/>
-  </svg>`;
-}
-
-function svgImpressionSunrise() {
-  return `<svg class="css-painting" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-  <defs><linearGradient id="issky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1a2a3a"/><stop offset="60%" stop-color="#3a4a5a"/><stop offset="100%" stop-color="#5a5040"/></linearGradient></defs>
-  <rect width="400" height="300" fill="url(#issky)"/>
-  <circle cx="150" cy="120" r="30" fill="#e87030" opacity="0.8"/>
-  <circle cx="150" cy="120" r="18" fill="#f09030" opacity="0.9"/>
-  <path d="M80 150 Q200 145 320 150 Q280 165 200 160 Q130 165 80 150" fill="#e87030" opacity="0.4"/>
-  <rect x="0" y="200" width="400" height="100" fill="#1a2a3a" opacity="0.7"/>
-  <rect x="0" y="195" width="400" height="20" fill="#3a5060" opacity="0.5"/>
-  <rect x="60" y="140" width="8" height="70" fill="#0a0808" opacity="0.7"/>
-  <rect x="200" y="130" width="8" height="80" fill="#0a0808" opacity="0.6"/>
-  <rect x="300" y="145" width="8" height="65" fill="#0a0808" opacity="0.5"/>
-  <rect x="55" y="135" width="18" height="8" fill="#0a0808" opacity="0.7"/>
-  </svg>`;
-}
-
-function svgCliffWalk() {
-  return `<svg class="css-painting" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-  <defs><linearGradient id="cwsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#5a80a0"/><stop offset="100%" stop-color="#8ab0c0"/></linearGradient></defs>
-  <rect width="400" height="300" fill="url(#cwsky)"/>
-  <rect x="0" y="180" width="400" height="120" fill="#2a4a5a" opacity="0.9"/>
-  <rect x="0" y="160" width="400" height="30" fill="#4a6a7a" opacity="0.7"/>
-  <rect x="0" y="120" width="300" height="80" fill="#5a8040" opacity="0.85"/>
-  <path d="M280 120 Q320 115 380 130 L380 200 Q330 190 280 200 Z" fill="#d0c8a0" opacity="0.8"/>
-  <ellipse cx="120" cy="130" rx="12" ry="18" fill="#c8a040" opacity="0.8"/>
-  <ellipse cx="120" cy="127" rx="4" ry="5" fill="#d0c8a0" opacity="0.7"/>
-  <ellipse cx="170" cy="128" rx="11" ry="17" fill="#c04030" opacity="0.8"/>
-  <ellipse cx="170" cy="125" rx="4" ry="5" fill="#d0c8a0" opacity="0.7"/>
-  </svg>`;
-}
-
-function svgSummersDay() {
-  return `<svg class="css-painting" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-  <defs><linearGradient id="sdwater" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#5a90a0"/><stop offset="100%" stop-color="#3a7080"/></linearGradient></defs>
-  <rect width="400" height="300" fill="#8ab0c0"/>
-  <rect x="0" y="140" width="400" height="160" fill="url(#sdwater)"/>
-  <ellipse cx="200" cy="175" rx="120" ry="25" fill="#4a8090" opacity="0.6"/>
-  <rect x="100" y="150" width="200" height="40" rx="10" fill="#c8b880" opacity="0.85"/>
-  <ellipse cx="140" cy="155" rx="20" ry="28" fill="#c0a060" opacity="0.7"/>
-  <ellipse cx="260" cy="153" rx="18" ry="26" fill="#d04040" opacity="0.7"/>
-  <path d="M80 155 Q200 165 320 155" stroke="#d0c8a0" stroke-width="3" fill="none" opacity="0.5"/>
-  </svg>`;
-}
-
-function svgLaundry() {
-  return `<svg class="css-painting" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-  <defs><linearGradient id="lndsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#8ab0c0"/><stop offset="100%" stop-color="#c0d0b0"/></linearGradient></defs>
-  <rect width="400" height="300" fill="url(#lndsky)"/>
-  <rect x="0" y="200" width="400" height="100" fill="#4a6030" opacity="0.8"/>
-  <rect x="0" y="185" width="400" height="25" fill="#6a8040" opacity="0.7"/>
-  <line x1="50" y1="110" x2="350" y2="110" stroke="#8a7060" stroke-width="2" opacity="0.7"/>
-  <rect x="60" y="108" width="60" height="80" rx="3" fill="#f0ead8" opacity="0.9"/>
-  <rect x="140" y="105" width="50" height="85" rx="3" fill="#d0e0f0" opacity="0.85"/>
-  <rect x="210" y="110" width="70" height="75" rx="3" fill="#f0e0c0" opacity="0.85"/>
-  <rect x="295" y="108" width="45" height="80" rx="3" fill="#f5f0e8" opacity="0.8"/>
-  <ellipse cx="200" cy="185" rx="12" ry="18" fill="#c0a080" opacity="0.7"/>
-  </svg>`;
-}
-
-function svgStarryNight() {
-  return `<svg class="css-painting" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-  <defs><linearGradient id="snsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0a1028"/><stop offset="100%" stop-color="#1a2040"/></linearGradient></defs>
-  <rect width="400" height="300" fill="url(#snsky)"/>
-  <path d="M0 80 Q80 60 160 80 Q240 100 320 70 Q370 55 400 75" stroke="#2a4a8a" stroke-width="18" fill="none" opacity="0.7"/>
-  <path d="M0 100 Q80 75 160 95 Q240 115 320 85 Q370 70 400 90" stroke="#3a5a9a" stroke-width="14" fill="none" opacity="0.5"/>
-  <circle cx="320" cy="50" r="20" fill="#f0e030" opacity="0.85"/>
-  <circle cx="320" cy="50" r="12" fill="#f8f030" opacity="0.9"/>
-  <circle cx="80" cy="40" r="6" fill="#f0f0d0" opacity="0.8"/>
-  <circle cx="150" cy="30" r="5" fill="#f0f0d0" opacity="0.7"/>
-  <circle cx="220" cy="45" r="7" fill="#f0f0d0" opacity="0.75"/>
-  <circle cx="50" cy="65" r="5" fill="#f0f0d0" opacity="0.7"/>
-  <circle cx="270" cy="25" r="6" fill="#f0f0d0" opacity="0.8"/>
-  <ellipse cx="60" cy="175" rx="28" ry="70" fill="#0d1508" opacity="0.97"/>
-  <rect x="0" y="210" width="400" height="90" fill="#1a2010" opacity="0.9"/>
-  <rect x="130" y="185" width="40" height="30" fill="#3a3020" opacity="0.8"/>
-  <rect x="100" y="165" width="30" height="25" rx="3" fill="#4a4030" opacity="0.7"/>
-  </svg>`;
-}
-
-function svgWheatSheaves() {
-  return `<svg class="css-painting" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-  <defs><linearGradient id="wssky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#4a4030"/><stop offset="100%" stop-color="#6a6040"/></linearGradient></defs>
-  <rect width="400" height="300" fill="url(#wssky)"/>
-  <rect x="0" y="170" width="400" height="130" fill="#3a3018" opacity="0.9"/>
-  <ellipse cx="100" cy="195" rx="35" ry="20" fill="#6a5020" opacity="0.9"/>
-  <path d="M70 200 Q100 165 130 200" stroke="#8a7030" stroke-width="3" fill="none" opacity="0.8"/>
-  <ellipse cx="200" cy="190" rx="32" ry="18" fill="#7a6028" opacity="0.9"/>
-  <path d="M170 195 Q200 162 230 195" stroke="#8a7030" stroke-width="3" fill="none" opacity="0.8"/>
-  <ellipse cx="310" cy="198" rx="30" ry="17" fill="#6a5020" opacity="0.85"/>
-  <path d="M283 202 Q310 168 337 202" stroke="#8a7030" stroke-width="3" fill="none" opacity="0.8"/>
-  <rect x="0" y="155" width="400" height="20" fill="#2a2808" opacity="0.5"/>
-  </svg>`;
-}
-
-function svgPoplars() {
-  return `<svg class="css-painting" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-  <defs><linearGradient id="popsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#c0d0e0"/><stop offset="100%" stop-color="#a0b8c0"/></linearGradient></defs>
-  <rect width="400" height="300" fill="url(#popsky)"/>
-  <rect x="0" y="220" width="400" height="80" fill="#2a4020" opacity="0.7"/>
-  <rect x="0" y="215" width="400" height="15" fill="#3a5030" opacity="0.5"/>
-  ${[0,1,2,3,4,5,6,7,8,9,10].map((i) => {
-    const x = 20 + i*34;
-    const col = ['#c04030','#d08020','#2a6a2a','#2050a0','#c04030','#d08020','#3a7a3a','#c05040','#208020','#c09030','#2a5a9a'][i];
-    return `<rect x="${x}" y="80" width="8" height="145" fill="${col}" opacity="0.85"/>
-    <ellipse cx="${x+4}" cy="75" rx="16" ry="35" fill="${col}" opacity="0.75"/>`;
-  }).join('')}
-  </svg>`;
-}
-
-function svgBeechTrees() {
-  return `<svg class="css-painting" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-  <rect width="400" height="300" fill="#1a2810"/>
-  ${[0,1,2,3,4,5,6].map((i) => {
-    const x = 30 + i*55;
-    const colors = ['#c04030','#8a6020','#2a5a2a','#c08030','#2a4a8a','#b03020','#3a7a3a'];
-    const c = colors[i % colors.length];
-    return `<rect x="${x}" y="0" width="12" height="300" fill="${c}" opacity="0.7"/>
-    <rect x="${x-10}" y="60" width="8" height="120" fill="${c}" opacity="0.4" transform="rotate(-20,${x},120)"/>
-    <rect x="${x+14}" y="80" width="7" height="100" fill="${c}" opacity="0.4" transform="rotate(15,${x+20},140)"/>`;
-  }).join('')}
-  </svg>`;
-}
-
-function svgWrappedTrees() {
-  return `<svg class="css-painting" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-  <defs><linearGradient id="wtsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#a0b0b8"/><stop offset="100%" stop-color="#c0c8c0"/></linearGradient></defs>
-  <rect width="400" height="300" fill="url(#wtsky)"/>
-  <rect x="0" y="220" width="400" height="80" fill="#2a3020" opacity="0.7"/>
-  ${[80,170,280,350].map((x,i) => {
-    const h = [120,100,140,90][i];
-    const y = 220 - h;
-    return `<ellipse cx="${x}" cy="${y + h/2}" rx="40" ry="${h/2}" fill="#d0cdb8" opacity="0.85"/>
-    <rect x="${x-6}" y="${y+h}" width="12" height="40" fill="#c0bda8" opacity="0.8"/>`;
-  }).join('')}
-  </svg>`;
-}
-
-function svgUmbrellas() {
-  return `<svg class="css-painting" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-  <defs><linearGradient id="umbsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#5a80a0"/><stop offset="100%" stop-color="#8ab0c0"/></linearGradient></defs>
-  <rect width="400" height="300" fill="url(#umbsky)"/>
-  <rect x="0" y="230" width="400" height="70" fill="#4a6030" opacity="0.8"/>
-  ${[50,110,175,240,305,355].map((x,i) => {
-    const isBlue = i % 2 === 0;
-    const col = isBlue ? '#2050a0' : '#d09020';
-    const y = 150 + (i % 3) * 12;
-    return `<path d="M${x-30} ${y} Q${x} ${y-30} ${x+30} ${y}" fill="${col}" opacity="0.85"/>
-    <line x1="${x}" y1="${y}" x2="${x}" y2="${y+55}" stroke="#8a8070" stroke-width="2" opacity="0.8"/>`;
-  }).join('')}
-  </svg>`;
-}
-
-function svgSeascape1() {
-  return `<svg class="css-painting" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-  <defs><linearGradient id="ss1sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#8098a8"/><stop offset="50%" stop-color="#a0b0b8"/><stop offset="100%" stop-color="#6880a0"/></linearGradient></defs>
-  <rect width="400" height="300" fill="url(#ss1sky)"/>
-  <rect x="0" y="150" width="400" height="150" fill="#4a6880" opacity="0.8"/>
-  <ellipse cx="200" cy="148" rx="200" ry="8" fill="#6080a0" opacity="0.5"/>
-  <ellipse cx="150" cy="60" rx="90" ry="30" fill="#c0c8c8" opacity="0.5"/>
-  <ellipse cx="300" cy="50" rx="70" ry="22" fill="#d0d8d8" opacity="0.4"/>
-  </svg>`;
-}
-
-function svgSeascape2() {
-  return `<svg class="css-painting" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-  <rect width="400" height="300" fill="#90a0a8"/>
-  <rect x="0" y="148" width="400" height="5" fill="#5a7080" opacity="0.8"/>
-  <rect x="0" y="153" width="400" height="147" fill="#5878a0" opacity="0.75"/>
-  <rect x="0" y="0" width="400" height="148" fill="#a0b0b8" opacity="0.8"/>
-  </svg>`;
-}
-
-function svgGlacier1() {
-  return `<svg class="css-painting" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-  <defs><linearGradient id="gl1bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#a0b8c8"/><stop offset="100%" stop-color="#c8d8e0"/></linearGradient></defs>
-  <rect width="400" height="300" fill="url(#gl1bg)"/>
-  <path d="M0 50 Q100 30 200 55 Q300 80 400 40 L400 250 Q300 230 200 245 Q100 260 0 240 Z" fill="#d8e8f0" opacity="0.9"/>
-  ${[0,1,2,3].map(i => `<path d="M0 ${100+i*28} Q200 ${95+i*28} 400 ${100+i*28}" stroke="#7090a8" stroke-width="3" fill="none" opacity="0.5"/>`).join('')}
-  <path d="M20 80 Q40 100 20 130" stroke="#5a7080" stroke-width="4" fill="none" opacity="0.4"/>
-  </svg>`;
-}
-
-function svgGlacier2() {
-  return `<svg class="css-painting" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-  <defs><linearGradient id="gl2bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#7090a0"/><stop offset="100%" stop-color="#a0b8c0"/></linearGradient></defs>
-  <rect width="400" height="300" fill="url(#gl2bg)"/>
-  <rect x="0" y="180" width="400" height="120" fill="#3a5030" opacity="0.7"/>
-  <path d="M0 100 Q100 80 200 110 Q300 135 400 90 L400 180 Q300 170 200 175 Q100 180 0 175 Z" fill="#d0e0e8" opacity="0.9"/>
-  ${[0,1,2].map(i => `<path d="M0 ${110+i*22} Q200 ${105+i*22} 400 ${110+i*22}" stroke="#6080a0" stroke-width="2.5" fill="none" opacity="0.45"/>`).join('')}
-  <path d="M0 178 Q100 165 200 172 Q300 180 400 170" stroke="#2a4020" stroke-width="8" fill="none" opacity="0.5"/>
-  </svg>`;
-}
-
-function svgWeatherProject() {
-  return `<svg class="css-painting" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-  <defs><radialGradient id="wpcent" cx="50%" cy="75%" r="60%"><stop offset="0%" stop-color="#e07020" stop-opacity="0.9"/><stop offset="50%" stop-color="#d05010" stop-opacity="0.6"/><stop offset="100%" stop-color="#1a0808" stop-opacity="0.95"/></radialGradient></defs>
-  <rect width="400" height="300" fill="#0a0505"/>
-  <rect width="400" height="300" fill="url(#wpcent)"/>
-  <path d="M50 220 Q200 215 350 220 L350 300 L50 300 Z" fill="#1a0808" opacity="0.6"/>
-  <path d="M100 220 Q200 200 300 220 Q200 240 100 220" fill="#e07020" opacity="0.15"/>
-  <ellipse cx="200" cy="220" rx="80" ry="8" fill="#e08030" opacity="0.2"/>
-  <ellipse cx="200" cy="175" rx="120" ry="55" fill="#1a0808" opacity="0.7"/>
-  </svg>`;
-}
-
-function svgIceWatch() {
-  return `<svg class="css-painting" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-  <defs><linearGradient id="iwbg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#8098b0"/><stop offset="100%" stop-color="#5070a0"/></linearGradient></defs>
-  <rect width="400" height="300" fill="url(#iwbg)"/>
-  <rect x="0" y="200" width="400" height="100" fill="#3a3028" opacity="0.9"/>
-  <rect x="0" y="195" width="400" height="12" fill="#4a4038" opacity="0.8"/>
-  ${[60,140,220,310].map((x,i) => {
-    const w = [55,45,65,40][i];
-    const h = [30,25,40,22][i];
-    return `<ellipse cx="${x}" cy="210" rx="${w/2}" ry="${h/2}" fill="#c8d8e8" opacity="0.85"/>
-    <path d="M${x-w/3} ${210-h/4} Q${x} ${210-h/2-5} ${x+w/3} ${210-h/4}" fill="#d8e8f8" opacity="0.6"/>`;
-  }).join('')}
-  </svg>`;
-}
-
-function svgGardenGiverny() {
-  return `<svg class="css-painting" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-  <defs><linearGradient id="ggsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#5a8050"/><stop offset="100%" stop-color="#3a6030"/></linearGradient></defs>
-  <rect width="400" height="300" fill="#3a6030"/>
-  <rect x="160" y="0" width="80" height="300" fill="#6a8a50" opacity="0.5"/>
-  ${['#d06080','#c05070','#e07090','#b04060','#d08040','#e09050','#c07030'].map((c,i) => {
-    const y = 20 + i * 38;
-    return `<ellipse cx="120" cy="${y}" rx="45" ry="20" fill="${c}" opacity="0.8"/>
-    <ellipse cx="280" cy="${y+10}" rx="42" ry="18" fill="${c}" opacity="0.75"/>`;
-  }).join('')}
-  <rect x="0" y="270" width="400" height="30" fill="#4a6838" opacity="0.9"/>
-  </svg>`;
-}
-
-function svgPathway() {
-  return `<svg class="css-painting" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-  <rect width="400" height="300" fill="#4a6830"/>
-  <path d="M160 0 Q170 150 150 300 L250 300 Q230 150 240 0 Z" fill="#a0b080" opacity="0.7"/>
-  ${['#c070a0','#e09030','#a05090','#d08020','#b06080','#8050a0'].map((c,i) => {
-    const side = i % 2 === 0 ? 60 : 290;
-    const y = 30 + i * 45;
-    return `<ellipse cx="${side}" cy="${y}" rx="60" ry="22" fill="${c}" opacity="0.75"/>`;
-  }).join('')}
-  </svg>`;
-}
-
-function svgWaterLily() {
-  return `<svg class="css-painting" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-  <defs><linearGradient id="wlwater" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#2a4a3a"/><stop offset="100%" stop-color="#1a3028"/></linearGradient></defs>
-  <rect width="400" height="300" fill="url(#wlwater)"/>
-  <rect x="0" y="0" width="400" height="120" fill="#3a5040" opacity="0.5"/>
-  <path d="M130 40 Q200 10 270 40 Q300 100 270 140 Q200 165 130 140 Q100 100 130 40" fill="#4a5028" opacity="0.85"/>
-  <rect x="195" y="40" width="10" height="130" rx="5" fill="#5a4020" opacity="0.85"/>
-  <path d="M50 170 Q200 165 350 170 L350 300 L50 300 Z" fill="#3a6050" opacity="0.7"/>
-  ${[80,150,220,300,100,260].map((x,i) => {
-    const y = 200 + (i%3)*20;
-    const c = i % 2 === 0 ? '#f0d8c0' : '#e8c0a8';
-    return `<ellipse cx="${x}" cy="${y}" rx="22" ry="12" fill="#2a4830" opacity="0.85"/>
-    <ellipse cx="${x}" cy="${y}" rx="8" ry="6" fill="${c}" opacity="0.8"/>`;
-  }).join('')}
-  </svg>`;
-}
-
-// Original gay room paintings
-function svgPorter() {
-  return `<svg class="css-painting" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-  <defs><radialGradient id="pbg" cx="50%" cy="40%" r="60%"><stop offset="0%" stop-color="#4a3520"/><stop offset="100%" stop-color="#1a0f06"/></radialGradient></defs>
-  <rect width="400" height="300" fill="url(#pbg)"/>
-  <ellipse cx="200" cy="105" rx="48" ry="55" fill="#c8a882" opacity="0.9"/>
-  <rect x="152" y="155" width="96" height="110" rx="4" fill="#1a1060" opacity="0.95"/>
-  <ellipse cx="200" cy="158" rx="38" ry="10" fill="#f0ead8" opacity="0.9"/>
-  <path d="M162 175 Q200 195 238 175" stroke="#c9a84c" stroke-width="3" fill="none" opacity="0.8"/>
-  <rect x="0" y="0" width="60" height="300" fill="#110900" opacity="0.5"/>
-  <rect x="340" y="0" width="60" height="300" fill="#110900" opacity="0.5"/>
-  </svg>`;
-}
-
-function svgDeerPark() {
-  return `<svg class="css-painting" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-  <defs><linearGradient id="dpsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#7ba3c8"/><stop offset="60%" stop-color="#c8dbe8"/><stop offset="100%" stop-color="#e8d8a0"/></linearGradient><linearGradient id="dpland" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#5a7a3a"/><stop offset="100%" stop-color="#3a5220"/></linearGradient></defs>
-  <rect width="400" height="300" fill="url(#dpsky)"/>
-  <ellipse cx="100" cy="60" rx="55" ry="22" fill="white" opacity="0.75"/>
-  <rect x="0" y="170" width="400" height="130" fill="url(#dpland)"/>
-  <rect x="150" y="130" width="100" height="60" fill="#b8a888" opacity="0.9"/>
-  <rect x="140" y="110" width="120" height="30" fill="#a89878" opacity="0.9"/>
-  <ellipse cx="60" cy="155" rx="28" ry="40" fill="#2a4a18" opacity="0.9"/>
-  <ellipse cx="340" cy="148" rx="22" ry="36" fill="#2a4a18" opacity="0.9"/>
-  <ellipse cx="220" cy="215" rx="14" ry="8" fill="#5a3a18" opacity="0.7"/>
-  <ellipse cx="250" cy="210" rx="12" ry="7" fill="#5a3a18" opacity="0.7"/>
-  </svg>`;
-}
-
-function svgLadyOscar() {
-  return `<svg class="css-painting" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-  <defs><radialGradient id="lobg" cx="50%" cy="30%" r="70%"><stop offset="0%" stop-color="#3a2840"/><stop offset="100%" stop-color="#0d080f"/></radialGradient></defs>
-  <rect width="400" height="300" fill="url(#lobg)"/>
-  <ellipse cx="200" cy="100" rx="44" ry="50" fill="#d4b090" opacity="0.9"/>
-  <rect x="156" y="145" width="88" height="120" rx="3" fill="#8a1a2e" opacity="0.95"/>
-  <path d="M160 148 Q200 168 240 148" stroke="#f5f0e8" stroke-width="1.5" fill="none" opacity="0.85"/>
-  <circle cx="200" cy="152" r="4" fill="#c9a84c" opacity="0.9"/>
-  </svg>`;
-}
-
-function svgGayOne() {
-  return `<svg class="css-painting" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-  <defs><radialGradient id="gobg" cx="45%" cy="45%" r="65%"><stop offset="0%" stop-color="#2a1f0a"/><stop offset="100%" stop-color="#100c04"/></radialGradient></defs>
-  <rect width="400" height="300" fill="url(#gobg)"/>
-  <rect x="0" y="210" width="400" height="90" fill="#3a2e1a" opacity="0.8"/>
-  <circle cx="160" cy="185" r="14" fill="#4a2060" opacity="0.9"/>
-  <circle cx="175" cy="175" r="12" fill="#5a2878" opacity="0.85"/>
-  <circle cx="240" cy="195" r="22" fill="#d4783a" opacity="0.9"/>
-  <ellipse cx="200" cy="160" rx="30" ry="15" fill="#2a4a18" opacity="0.8" transform="rotate(-20,200,160)"/>
-  <ellipse cx="310" cy="215" rx="40" ry="18" fill="#6b4a28" opacity="0.8"/>
-  </svg>`;
-}
-
-function svgCloudBum() {
-  return `<svg class="css-painting" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-  <defs><linearGradient id="cbsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#4a6a9a"/><stop offset="50%" stop-color="#c8a860"/><stop offset="100%" stop-color="#e8c870"/></linearGradient></defs>
-  <rect width="400" height="300" fill="url(#cbsky)"/>
-  <circle cx="220" cy="100" r="35" fill="#f0d870" opacity="0.35"/>
-  <rect x="0" y="220" width="400" height="80" fill="#6a8aaa" opacity="0.5"/>
-  <rect x="100" y="110" width="14" height="100" fill="#c8b890" opacity="0.9"/>
-  <rect x="130" y="100" width="14" height="110" fill="#d8c8a0" opacity="0.9"/>
-  <rect x="160" y="115" width="14" height="95" fill="#c0b080" opacity="0.8"/>
-  <ellipse cx="50" cy="130" rx="30" ry="80" fill="#1a2a10" opacity="0.95"/>
-  </svg>`;
-}
-
-function svgAllegory() {
-  return `<svg class="css-painting" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-  <defs><radialGradient id="albg" cx="50%" cy="50%" r="70%"><stop offset="0%" stop-color="#5a4020"/><stop offset="60%" stop-color="#2a1a08"/><stop offset="100%" stop-color="#0d0805"/></radialGradient></defs>
-  <rect width="400" height="300" fill="url(#albg)"/>
-  <ellipse cx="200" cy="80" rx="90" ry="70" fill="#f0c840" opacity="0.18"/>
-  <ellipse cx="200" cy="120" rx="35" ry="50" fill="#e8c8a0" opacity="0.6"/>
-  <ellipse cx="200" cy="85" rx="22" ry="25" fill="#d4a880" opacity="0.7"/>
-  <line x1="200" y1="20" x2="200" y2="110" stroke="#f0d860" stroke-width="1.5" opacity="0.2"/>
-  </svg>`;
-}
-
-/* ══════════════════════════════════════════════
-   LOBBY RENDERING
-══════════════════════════════════════════════ */
-
-const roomPreviews = {
-  'marble-hall': () => `<svg viewBox="0 0 300 120" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
-    <defs><linearGradient id="mhprev" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1a2a3a"/><stop offset="100%" stop-color="#3a4050"/></linearGradient></defs>
-    <rect width="300" height="120" fill="url(#mhprev)"/>
-    <rect x="0" y="75" width="300" height="45" fill="#3a3020" opacity="0.9"/>
-    <rect x="70" y="50" width="12" height="32" fill="#786858" opacity="0.9"/>
-    <rect x="90" y="46" width="12" height="36" fill="#8a7868" opacity="0.9"/>
-    <rect x="110" y="50" width="12" height="32" fill="#786858" opacity="0.9"/>
-    <rect x="66" y="44" width="60" height="9" fill="#9a8878" opacity="0.9"/>
-    <ellipse cx="240" cy="55" rx="25" ry="20" fill="#f0d870" opacity="0.15"/>
-    <ellipse cx="20" cy="60" rx="18" ry="40" fill="#0a0f08" opacity="0.95"/>
-  </svg>`,
-  'beauty-room': () => `<svg viewBox="0 0 300 120" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
-    <defs><linearGradient id="brprev" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1a2a3a"/><stop offset="60%" stop-color="#3a4a5a"/><stop offset="100%" stop-color="#5a5040"/></linearGradient></defs>
-    <rect width="300" height="120" fill="url(#brprev)"/>
-    <circle cx="100" cy="50" r="22" fill="#e87030" opacity="0.75"/>
-    <circle cx="100" cy="50" r="13" fill="#f09030" opacity="0.9"/>
-    <path d="M60 70 Q150 65 240 70 Q210 80 150 75 Q90 80 60 70" fill="#e87030" opacity="0.35"/>
-    <rect x="0" y="90" width="300" height="30" fill="#1a2a3a" opacity="0.7"/>
-    <rect x="220" y="55" width="6" height="40" fill="#0a0808" opacity="0.7"/>
-    <rect x="255" y="48" width="6" height="47" fill="#0a0808" opacity="0.6"/>
-  </svg>`,
-  'little-dining-room': () => `<svg viewBox="0 0 300 120" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
-    <defs><linearGradient id="ldrprev" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0a1028"/><stop offset="100%" stop-color="#1a2040"/></linearGradient></defs>
-    <rect width="300" height="120" fill="url(#ldrprev)"/>
-    <path d="M0 35 Q60 25 120 35 Q180 45 240 28 Q270 20 300 32" stroke="#2a4a8a" stroke-width="14" fill="none" opacity="0.7"/>
-    <circle cx="240" cy="22" r="15" fill="#f0e030" opacity="0.85"/>
-    <circle cx="60" cy="18" r="5" fill="#f0f0d0" opacity="0.8"/>
-    <circle cx="160" cy="15" r="6" fill="#f0f0d0" opacity="0.75"/>
-    <ellipse cx="45" cy="75" rx="22" ry="50" fill="#0d1508" opacity="0.97"/>
-    <rect x="0" y="95" width="300" height="25" fill="#1a2010" opacity="0.9"/>
-  </svg>`,
-  'red-room': () => `<svg viewBox="0 0 300 120" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
-    <rect width="300" height="120" fill="#1a0808"/>
-    <rect x="0" y="75" width="300" height="45" fill="#3a3028" opacity="0.9"/>
-    <ellipse cx="60" cy="60" rx="30" ry="42" fill="#d0cdb8" opacity="0.8"/>
-    <ellipse cx="130" cy="55" rx="28" ry="38" fill="#d0cdb8" opacity="0.75"/>
-    <ellipse cx="210" cy="62" rx="32" ry="44" fill="#d0cdb8" opacity="0.8"/>
-    <ellipse cx="275" cy="57" rx="25" ry="36" fill="#d0cdb8" opacity="0.7"/>
-  </svg>`,
-  'north-gallery': () => `<svg viewBox="0 0 300 120" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
-    <defs><linearGradient id="ngprev" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#a0b8c8"/><stop offset="100%" stop-color="#c8d8e0"/></linearGradient></defs>
-    <rect width="300" height="120" fill="url(#ngprev)"/>
-    <path d="M0 30 Q75 20 150 35 Q225 50 300 25 L300 90 Q225 80 150 87 Q75 94 0 88 Z" fill="#d8e8f0" opacity="0.9"/>
-    <path d="M0 50 Q150 44 300 50" stroke="#7090a8" stroke-width="3" fill="none" opacity="0.5"/>
-    <path d="M0 65 Q150 59 300 65" stroke="#7090a8" stroke-width="2.5" fill="none" opacity="0.4"/>
-  </svg>`,
-  'pleasure-garden': () => `<svg viewBox="0 0 300 120" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
-    <rect width="300" height="120" fill="#3a6030"/>
-    <rect x="120" y="0" width="60" height="120" fill="#6a8a50" opacity="0.5"/>
-    <ellipse cx="40" cy="25" rx="38" ry="18" fill="#d06080" opacity="0.8"/>
-    <ellipse cx="230" cy="30" rx="35" ry="16" fill="#d08040" opacity="0.75"/>
-    <ellipse cx="55" cy="65" rx="40" ry="17" fill="#c05070" opacity="0.8"/>
-    <ellipse cx="220" cy="70" rx="36" ry="16" fill="#e09050" opacity="0.7"/>
-    <ellipse cx="45" cy="100" rx="38" ry="16" fill="#e07090" opacity="0.75"/>
-    <ellipse cx="235" cy="105" rx="33" ry="15" fill="#c07030" opacity="0.7"/>
-  </svg>`,
-  'gay-room': () => `<svg viewBox="0 0 300 120" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
-    <defs><radialGradient id="grprev" cx="50%" cy="40%" r="60%"><stop offset="0%" stop-color="#3a2a40"/><stop offset="100%" stop-color="#0d080f"/></radialGradient></defs>
-    <rect width="300" height="120" fill="url(#grprev)"/>
-    <ellipse cx="150" cy="48" rx="38" ry="42" fill="#c8a882" opacity="0.8"/>
-    <rect x="112" y="87" width="76" height="33" rx="3" fill="#1a1060" opacity="0.9"/>
-    <ellipse cx="150" cy="90" rx="30" ry="8" fill="#f0ead8" opacity="0.85"/>
-  </svg>`
-};
 
 function renderLobby() {
   const grid = document.getElementById('rooms-grid');
-  grid.innerHTML = '';
-  ROOMS.forEach((room, idx) => {
-    const card = document.createElement('div');
-    card.className = 'room-card';
-    card.onclick = () => openRoom(room.id);
-    const numStr = String(idx + 1).padStart(2, '0');
-    const previewFn = roomPreviews[room.id];
-    card.innerHTML = `
-      <div class="room-card-preview">${previewFn ? previewFn() : ''}</div>
-      <div class="room-card-number">Room ${numStr}</div>
-      <div class="room-card-name">${room.name}</div>
-      <div class="room-card-artists">${room.artists}</div>
-      <div class="room-card-cta">${t('enterRoom')}</div>
-    `;
-    grid.appendChild(card);
-  });
+  grid.innerHTML = ROOMS.map(r => `
+    <div class="room-card" onclick="enterRoom('${r.id}')">
+      <div class="room-card-preview" style="background:${r.previewColor}"></div>
+      <div class="room-card-name">${getTxt(r.name)}</div>
+      <div style="color:var(--gold); font-size:0.8rem; margin-top:0.5rem;">${t('enterRoom')}</div>
+    </div>`).join('');
 }
 
-/* ══════════════════════════════════════════════
-   ROOM RENDERING
-══════════════════════════════════════════════ */
-
-let currentRoomId = null;
-
-function openRoom(roomId) {
-  stopAllAudio();
-  currentRoomId = roomId;
-  const room = ROOMS.find(r => r.id === roomId);
-  if (!room) return;
-
-  document.getElementById('room-header-title').textContent = room.name;
-
-  const container = document.getElementById('wall-container');
-  container.innerHTML = '';
-
-  let paintingIndex = 0;
-
-  room.sections.forEach(section => {
-    if (section.type === 'paintings') {
-      const label = document.createElement('p');
-      label.className = 'section-label';
-      label.textContent = section.artist;
-      container.appendChild(label);
-
-      const wall = document.createElement('div');
-      wall.className = 'wall';
-      container.appendChild(wall);
-
-      section.works.forEach(work => {
-        paintingIndex++;
-        const wrapper = document.createElement('div');
-        wrapper.className = 'painting-wrapper';
-        wrapper.dataset.title = work.title;
-        wrapper.dataset.artist = section.artist;
-        wrapper.dataset.date = work.date;
-        wrapper.dataset.body = work.body;
-
-        const numStr = String(paintingIndex).padStart(2, '0');
-        const audioText = `${work.title}, by ${section.artist}, ${work.date}. ${work.body}`;
-
-        wrapper.innerHTML = `
-          <div class="frame">${work.svg}</div>
-          <div class="plate">
-            <div class="plate-number">No. ${numStr}</div>
-            <div class="plate-title">${work.title}</div>
-            <div class="plate-artist">${section.artist}</div>
-          </div>
-          <button class="painting-audio-btn" onclick="togglePaintingAudio(this, ${JSON.stringify(audioText).replace(/'/g,"\\'")})">${t('readAloud')}</button>
-        `;
-
-        wall.appendChild(wrapper);
-      });
-
-    } else if (section.type === 'audio') {
-      const label = document.createElement('p');
-      label.className = 'section-label';
-      label.textContent = t('audioLabel');
-      container.appendChild(label);
-
-      const card = document.createElement('div');
-      card.className = 'audio-card';
-      const lines = section.excerpt.split('\n').join('<br>');
-      card.innerHTML = `
-        <div class="audio-card-label">${section.label}</div>
-        <div class="audio-card-title">${section.title}</div>
-        <div class="audio-card-author">${section.author}</div>
-        <div class="audio-card-excerpt">${lines}</div>
-        <button class="audio-btn" onclick="toggleAudio(this, ${JSON.stringify(section.audioText).replace(/'/g,"\\'")})">${t('listenBtn')}</button>
-      `;
-      container.appendChild(card);
-    }
-  });
-
-  // Show room screen
+function enterRoom(id) {
+  currentRoomId = id;
+  const r = ROOMS.find(x => x.id === id);
   document.getElementById('screen-lobby').classList.remove('active');
   document.getElementById('screen-room').classList.add('active');
-  window.scrollTo(0, 0);
-
-  // Re-attach tooltip listeners
-  attachTooltips();
-}
-
-function goToLobby() {
-  stopAllAudio();
-  document.getElementById('screen-room').classList.remove('active');
-  document.getElementById('screen-lobby').classList.add('active');
-  window.scrollTo(0, 0);
-}
-
-/* ══════════════════════════════════════════════
-   TOOLTIP
-══════════════════════════════════════════════ */
-
-const tooltip = document.getElementById('tooltip');
-const ttTitle = document.getElementById('tt-title');
-const ttArtist = document.getElementById('tt-artist');
-const ttDate = document.getElementById('tt-date');
-const ttBody = document.getElementById('tt-body');
-const OFFSET = 20, PADDING = 16;
-
-function positionTooltip(x, y) {
-  const tw = tooltip.offsetWidth, th = tooltip.offsetHeight;
-  const vw = window.innerWidth, vh = window.innerHeight;
-  let left = x + OFFSET, top = y + OFFSET;
-  if (left + tw + PADDING > vw) left = x - tw - OFFSET;
-  if (top + th + PADDING > vh) top = y - th - OFFSET;
-  if (left < PADDING) left = PADDING;
-  if (top < PADDING) top = PADDING;
-  tooltip.style.left = left + 'px';
-  tooltip.style.top = top + 'px';
-}
-
-function attachTooltips() {
-  document.querySelectorAll('.painting-wrapper').forEach(el => {
-    el.addEventListener('mouseenter', () => {
-      ttTitle.textContent = el.dataset.title;
-      ttArtist.textContent = el.dataset.artist;
-      ttDate.textContent = el.dataset.date;
-      ttBody.textContent = el.dataset.body;
-      tooltip.classList.add('visible');
-    });
-    el.addEventListener('mousemove', e => positionTooltip(e.clientX, e.clientY));
-    el.addEventListener('mouseleave', () => tooltip.classList.remove('visible'));
-  });
-}
-
-/* ══════════════════════════════════════════════
-   AUDIO (Web Speech API)
-══════════════════════════════════════════════ */
-
-let currentUtterance = null;
-let currentAudioBtn = null;
-
-function stopAllAudio() {
-  if (window.speechSynthesis) {
-    window.speechSynthesis.cancel();
-  }
-  document.querySelectorAll('.audio-btn.playing, .painting-audio-btn.playing').forEach(btn => {
-    btn.classList.remove('playing');
-    btn.textContent = btn.classList.contains('painting-audio-btn') ? t('readAloud') : t('listenBtn');
-  });
-  currentUtterance = null;
-  currentAudioBtn = null;
-}
-
-function speakText(text, btn, isPoetry) {
-  if (!window.speechSynthesis) {
-    alert('Text-to-speech is not supported in your browser.');
-    return;
-  }
-  stopAllAudio();
-
-  const langMap = {
-    en: 'en-GB', fr: 'fr-FR', de: 'de-DE', es: 'es-ES',
-    it: 'it-IT', zh: 'zh-CN', ja: 'ja-JP'
-  };
-
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = langMap[currentLang] || 'en-GB';
-  utterance.rate = isPoetry ? 0.85 : 0.9;
-  utterance.pitch = 1.0;
-
-  utterance.onstart = () => {
-    currentAudioBtn = btn;
-    btn.classList.add('playing');
-    btn.textContent = t(btn.classList.contains('painting-audio-btn') ? 'stopRead' : 'stopBtn');
-  };
-  utterance.onend = utterance.onerror = () => {
-    btn.classList.remove('playing');
-    btn.textContent = t(btn.classList.contains('painting-audio-btn') ? 'readAloud' : 'listenBtn');
-    currentUtterance = null;
-    currentAudioBtn = null;
-  };
-
-  currentUtterance = utterance;
-  window.speechSynthesis.speak(utterance);
+  document.getElementById('room-header-title').textContent = getTxt(r.name);
+  
+  const cont = document.getElementById('wall-container');
+  cont.innerHTML = r.sections.map(s => {
+    if (s.type === 'audio') return `
+      <div class="audio-card">
+        <div style="font-family:'Playfair Display'; font-size:1.5rem;">${getTxt(s.title)}</div>
+        <div style="color:var(--gold); margin-bottom:1rem;">${s.author}</div>
+        <p style="font-style:italic; line-height:1.6; opacity:0.8;">${getTxt(s.excerpt)}</p>
+        <button class="audio-btn" onclick="toggleAudio(this, '${getTxt(s.audioText).replace(/'/g,"\\'")}')">${t('listenBtn')}</button>
+      </div>`;
+    return `
+      <div class="section-label">${s.artist}</div>
+      <div class="wall">${s.works.map(w => {
+        // Clean text for speech
+        const speechText = (getTxt(w.title) + ". " + getTxt(w.body)).replace(/'/g,"\\'");
+        return `
+        <div class="painting-wrapper" onmouseenter="showTooltip(event, '${getTxt(w.title).replace(/'/g,"\\'")}', '${s.artist}', '${getTxt(w.body).replace(/'/g,"\\'")}')" onmouseleave="hideTooltip()">
+          <div class="frame" style="cursor:pointer;">${w.svg}</div>
+          <div style="text-align:center; margin-top:0.8rem; font-size:0.9rem; letter-spacing:0.05em;">${getTxt(w.title)}</div>
+          <center><button class="audio-btn" onclick="toggleAudio(this, '${speechText}')">${t('listenBtn')}</button></center>
+        </div>`;
+      }).join('')}</div>`;
+  }).join('');
 }
 
 function toggleAudio(btn, text) {
-  if (btn.classList.contains('playing')) {
-    stopAllAudio();
-  } else {
-    speakText(text, btn, true);
-  }
-}
-
-function togglePaintingAudio(btn, text) {
-  if (btn.classList.contains('playing')) {
-    stopAllAudio();
-  } else {
-    speakText(text, btn, false);
-  }
-}
-
-/* ══════════════════════════════════════════════
-   INIT
-══════════════════════════════════════════════ */
-renderLobby();
-applyTranslations();
-</script>
-<script>
-// =====================
-// PATCH: TRANSLATION + AUDIO FIX
-// =====================
-
-// --- SIMPLE TRANSLATION DICTIONARY ---
-const TRANSLATIONS = {
-  fr: {
-    "Marble Hall": "Salle de Marbre",
-    "Stonehenge": "Stonehenge",
-    "A prehistoric monument in England.": "Un monument préhistorique en Angleterre."
-  }
-};
-
-let currentLang = 'en';
-
-// --- TRANSLATE EVERYTHING ON SCREEN ---
-function translatePage() {
-  if (currentLang === 'en') return;
-
-  const dict = TRANSLATIONS[currentLang] || {};
-
-  document.querySelectorAll("body *").forEach(el => {
-    if (el.children.length === 0) { // only text nodes
-      const text = el.innerText.trim();
-      if (dict[text]) {
-        el.innerText = dict[text];
-      }
-    }
+  if (btn.classList.contains('playing')) { window.speechSynthesis.cancel(); btn.classList.remove('playing'); btn.textContent = t('listenBtn'); return; }
+  window.speechSynthesis.cancel();
+  
+  // Clean all other buttons
+  document.querySelectorAll('.audio-btn').forEach(b => {
+    b.classList.remove('playing');
+    b.textContent = t('listenBtn');
   });
+
+  const ut = new SpeechSynthesisUtterance(text);
+  const codes = { en: 'en-GB', fr: 'fr-FR', de: 'de-DE', es: 'es-ES', it: 'it-IT', zh: 'zh-CN', ja: 'ja-JP' };
+  ut.lang = codes[currentLang] || 'en-GB';
+  ut.onend = () => { btn.classList.remove('playing'); btn.textContent = t('listenBtn'); };
+  
+  btn.classList.add('playing'); btn.textContent = t('stopBtn');
+  window.speechSynthesis.speak(ut);
 }
 
-// --- LANGUAGE SWITCH HOOK ---
-window.setLang = function(lang) {
-  currentLang = lang;
+function goToLobby() { currentRoomId = null; window.speechSynthesis.cancel(); document.getElementById('screen-room').classList.remove('active'); document.getElementById('screen-lobby').classList.add('active'); }
 
-  // small delay so your original render runs first
-  setTimeout(() => {
-    translatePage();
-  }, 100);
-};
+function showTooltip(e, t, a, b) {
+  const tt = document.getElementById('tooltip');
+  document.getElementById('tt-title').textContent = t;
+  document.getElementById('tt-artist').textContent = a;
+  document.getElementById('tt-body').textContent = b;
+  tt.classList.add('visible'); 
+  let x = e.clientX + 20; let y = e.clientY + 20;
+  if (x + 320 > window.innerWidth) x = e.clientX - 340;
+  tt.style.left = x + 'px'; tt.style.top = y + 'px';
+}
+function hideTooltip() { document.getElementById('tooltip').classList.remove('visible'); }
 
-// --- AUDIO FIX ---
-window.speakText = function(text) {
-  if (!('speechSynthesis' in window)) return;
-
-  const speak = () => {
-    speechSynthesis.cancel();
-
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = (currentLang === 'fr') ? 'fr-FR' : 'en-GB';
-
-    utterance.onerror = (e) => console.error(e);
-
-    speechSynthesis.speak(utterance);
-  };
-
-  const voices = speechSynthesis.getVoices();
-
-  if (!voices.length) {
-    speechSynthesis.onvoiceschanged = speak;
-  } else {
-    speak();
-  }
-};
-
-// --- MAKE ALL TEXT CLICKABLE FOR AUDIO ---
-document.addEventListener('click', (e) => {
-  const text = e.target.innerText;
-  if (text && text.length < 200) {
-    speakText(text);
-  }
-});
+window.onload = () => { setLang('en'); };
 </script>
 </body>
 </html>
